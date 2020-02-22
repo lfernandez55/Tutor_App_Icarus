@@ -3,12 +3,12 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 
-from flask import Blueprint, redirect, render_template
+from flask import Blueprint, redirect, render_template, flash
 from flask import request, url_for
 from flask_user import current_user, login_required, roles_required
 
 from app import db
-from app.models.user_models import UserProfileForm
+from app.models.user_models import UserProfileForm, User, Role, UserCustomForm
 from app.forms.book_forms import BookForm
 
 main_blueprint = Blueprint('main', __name__, template_folder='templates')
@@ -61,4 +61,107 @@ def user_profile_page():
     return render_template('main/user_profile_page.html',
                            form=form)
 
+
+# the following admin views list users, edit users, creat new users
+
+# The Admin page is accessible to users with the 'admin' role
+@main_blueprint.route('/admin_list_users')
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_list_users():
+    users = User.query.all()
+    return render_template('main/admin_list_users.html', users=users)
+
+
+@main_blueprint.route('/admin_edit_user/<user_id>', methods=['GET', 'POST'] )
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_edit_user(user_id):
+    user = User.query.filter(User.id == user_id).first()
+
+    # see "secret sauce" at https://stackoverflow.com/questions/12099741/how-do-you-set-a-default-value-for-a-wtforms-selectfield
+    # to have a particular option selected in a selectlist, the option has to be loaded into the form when it is first instantiated
+    # likewise to have multiple options selected in a multipleselectlist the options have to be loaded into the form when it is first instantiated
+    # the syntax for setting the selects varies:
+    # selectlist example:  form = MyUserForm(roles=1) #the first option is preselected
+    # selectmultiplelist example: form = MyUserForm(roles=[1,3]) #the first and third option are preselected
+    
+    # determining the default options to be selected (notice how they are loaded when the form is instantiated)
+    current_roles = []
+    for role in user.roles:
+        current_roles.append(str(role.id))
+
+    form = UserCustomForm(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, roles=current_roles)
+
+    # adding the full set of select options to the select list (this is different than determining the default/selected options above)
+    rolesCollection = Role.query.all()
+    role_list = []
+    for role in rolesCollection:
+        role_list.append(role.name)
+    role_choices = list(enumerate(role_list,start=1))
+    form.roles.choices = role_choices
+
+
+    if form.validate_on_submit():
+        user.first_name  = form.first_name.data
+        user.last_name = form.last_name.data
+        user.email = form.email.data
+        user.roles = []
+        for role_id in form.roles.data:
+            roleObj = Role.query.filter(Role.id == role_id).first()
+            user.roles.append(roleObj)
+        db.session.add(user)
+        db.session.commit()
+        flash('User Updated!!', 'success')
+        return redirect(url_for('main.admin_list_users'))
+    return render_template('main/admin_edit_user.html', form=form)
+
+@main_blueprint.route('/admin_delete_user/<user_id>')
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_delete_user(user_id):
+    user = User.query.filter(User.id == user_id).first()
+    db.session.delete(user)
+    db.session.commit()
+    flash('User Deleted!!', 'success')
+    return redirect(url_for('main.admin_list_users'))
+
+@main_blueprint.route('/admin_create_roles')
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_create_roles():
+
+    new_roles = ['super_user','reg_user']
+    for new_role_name in new_roles:
+        role = Role.query.filter(Role.name == new_role_name).first()
+        if role == None:
+            new_role = Role()
+            new_role.name = new_role_name
+            db.session.add(new_role)
+            db.session.commit()
+   
+    roles = Role.query.all()
+    role_message = ""
+    for role in roles:
+        role_message = role.name + ", " + role_message 
+    role_message = "The following roles now exist in the db: " + role_message
+    flash(role_message, 'success')
+    return redirect(url_for('main.admin_page'))
+
+
+@main_blueprint.route('/admin_create_user')
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_create_user():
+    return render_template('main/admin_create_user.html')
+
+@main_blueprint.route('/admin_super_user_or_admin')
+@roles_required(['admin', 'super_user'])  # requires admin OR super_user role
+def admin_super_user_or_admin():
+    return "You have the right roles to access this page - it requires admin OR super_user roles"
+
+@main_blueprint.route('/admin_super_user_and_admin')
+@roles_required('admin','super_user')  # required admin AND super_user roles
+def admin_super_user_and_admin():
+    return "You have the right roles to access this view"
+
+@main_blueprint.route('/admin_reg_user')
+@roles_required('reg_user')  
+def admin_reg_user():
+    return "You have the right roles to access this page - requires reg_user role"
 

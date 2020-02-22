@@ -3,13 +3,15 @@
 {% block title %}{{app_name}}{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item">Home > Admin Page</li>
+<li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}" >Home</a> > 
+  > Admin Page
+</li>
 {% endblock %}
 
 
 {% block page_content %}
-
-
-  <div><h1>Admin Page</h1></div>
-  <p><p>
+  <h1>Admin Page</h1>
+  <a class="btn btn-default" href="{{ url_for('main.admin_list_users') }}">List Users</a>
+  <a class="btn btn-default" href="{{ url_for('main.admin_create_user') }}">Create User</a>
+  <a class="btn btn-default" href="{{ url_for('main.admin_create_roles') }}">Create Roles</a>
 {% endblock %}

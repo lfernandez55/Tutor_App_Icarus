@@ -1,0 +1,25 @@
+{% extends "main/main_base.html" %}  {# main/main_base.html extends layout.html #}
+
+{% block title %}{{app_name}}{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}" >Home</a> > 
+    <a href="{{ url_for('main.admin_page') }}" >Admin Page</a>
+    > List Users
+  </li>
+{% endblock %}
+
+{% block page_content %}
+  <h1>List Users</h1>
+  <table class="table">
+  {% for user in users | sort(attribute=last_name) %}
+  <tr>
+      <td>{{user.first_name}}</td>
+      <td>{{user.last_name}}</td>
+      <td>{{user.email}}</td>
+      <td><a href="{{ url_for('main.admin_edit_user', user_id=user.id) }}" >edit</a></td>
+      <td><a href="{{ url_for('main.admin_delete_user', user_id=user.id) }}" >delete</a></td>
+  </tr>  
+  {% endfor %}
+</table>
+{% endblock %}
