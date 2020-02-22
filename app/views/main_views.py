@@ -9,13 +9,21 @@ from flask_user import current_user, login_required, roles_required
 
 from app import db
 from app.models.user_models import UserProfileForm
+from app.forms.book_forms import BookForm
 
 main_blueprint = Blueprint('main', __name__, template_folder='templates')
+
+
 
 # The Home page is accessible to anyone
 @main_blueprint.route('/')
 def home_page():
     return render_template('main/home_page.html')
+
+@main_blueprint.route('/foo')
+def foo():
+    bookForm = BookForm()
+    return render_template('main/foo.html', bookForm = bookForm)
 
 
 # The User page is accessible to authenticated users (users that have logged in)

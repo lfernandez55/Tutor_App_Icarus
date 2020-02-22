@@ -32,7 +32,8 @@ def create_app(extra_config_settings={}):
     app.config.from_object('app.local_settings')
     # Load extra settings from extra_config_settings param
     app.config.update(extra_config_settings)
-
+    print("ddddddddddd",app.config['MAIL_SERVER'])
+    print("ddddddddddd",app.config['MAIL_PORT'])
     # Setup Flask-SQLAlchemy
     db.init_app(app)
 
@@ -70,6 +71,33 @@ def create_app(extra_config_settings={}):
     @app.context_processor
     def context_processor():
         return dict(user_manager=user_manager)
+
+        # The below function (isAdmin) is called the nav of app/layout to determine
+    # whether the user is an admin
+    #see: https://junxiandoc.readthedocs.io/en/latest/docs/flask/flask_template.html
+    @app.context_processor
+    def utility_processor():
+        def isAdmin(user):
+
+            roleName = db.engine.execute("SELECT * FROM Roles")
+            for role in roleName:
+                print('dddd')
+                print(role['name'])
+
+            sqlStatement = "SELECT roles.name FROM roles JOIN users_roles ON roles.id=users_roles.role_id JOIN users ON users.id=users_roles.user_id WHERE users.email='" + user + "' AND roles.name='admin'"
+            print(sqlStatement)
+            roleName = db.engine.execute(sqlStatement)
+            # Casting the returned alchemy query object into a list
+            # See https://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
+            roleName = [dict(row) for row in roleName]
+
+            if len(roleName) > 0 and roleName[0]['name'] == 'admin':
+                returnValue = 1
+            else:
+                returnValue = 0
+            return returnValue
+        return dict(isAdmin=isAdmin)
+
 
     return app
 

@@ -63,3 +63,12 @@ class UserProfileForm(FlaskForm):
     last_name = StringField('Last name', validators=[
         validators.DataRequired('Last name is required')])
     submit = SubmitField('Save')
+
+# Define the User profile form
+class BookForm(FlaskForm):
+    author = StringField('Author', validators=[
+        validators.DataRequired('This is a required field')])
+    title = StringField('Last name', validators=[
+        validators.DataRequired('This is a required field')])
+    submit = SubmitField('Save')
+
