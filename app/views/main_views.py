@@ -4,7 +4,7 @@
 
 
 from flask import Blueprint, redirect, render_template, flash
-from flask import request, url_for
+from flask import request, url_for, current_app
 from flask_user import current_user, login_required, roles_required
 
 from app import db
@@ -110,6 +110,8 @@ def admin_edit_user(user_id):
         for role_id in form.roles.data:
             roleObj = Role.query.filter(Role.id == role_id).first()
             user.roles.append(roleObj)
+        if form.password.data != "":
+            user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('User Updated!!', 'success')

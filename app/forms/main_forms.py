@@ -17,8 +17,7 @@ class UserCustomForm(FlaskForm):
         validators.DataRequired('Last name is required')])
     email = StringField('Email', validators=[
         validators.DataRequired('Email is required')])
-    # password = StringField('Password', validators=[
-    #     validators.DataRequired('Email is required')])
+    password = StringField('Password')
     roles = SelectMultipleField(label='Roles', coerce=int)
     submit = SubmitField('Save')
 
