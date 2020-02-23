@@ -8,8 +8,9 @@ from flask import request, url_for
 from flask_user import current_user, login_required, roles_required
 
 from app import db
-from app.models.user_models import UserProfileForm, User, Role, UserCustomForm
+from app.models.user_models import User, Role
 from app.forms.book_forms import BookForm
+from app.forms.main_forms import UserProfileForm, UserCustomForm
 
 main_blueprint = Blueprint('main', __name__, template_folder='templates')
 
@@ -20,6 +21,7 @@ main_blueprint = Blueprint('main', __name__, template_folder='templates')
 def home_page():
     return render_template('main/home_page.html')
 
+# this is here just as model code for creating new views and forms
 @main_blueprint.route('/foo')
 def foo():
     bookForm = BookForm()

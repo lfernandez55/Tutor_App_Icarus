@@ -3,9 +3,6 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 from flask_user import UserMixin
-# from flask_user.forms import RegisterForm
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectMultipleField, SelectField, validators
 from app import db
 
 
@@ -47,41 +44,5 @@ class UsersRoles(db.Model):
     role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
 
 
-# # Define the User registration form
-# # It augments the Flask-User RegisterForm with additional fields
-# class MyRegisterForm(RegisterForm):
-#     first_name = StringField('First name', validators=[
-#         validators.DataRequired('First name is required')])
-#     last_name = StringField('Last name', validators=[
-#         validators.DataRequired('Last name is required')])
 
-
-# Define the User profile form
-class UserProfileForm(FlaskForm):
-    first_name = StringField('First name', validators=[
-        validators.DataRequired('First name is required')])
-    last_name = StringField('Last name', validators=[
-        validators.DataRequired('Last name is required')])
-    submit = SubmitField('Save')
-
-# Define the User profile form
-class BookForm(FlaskForm):
-    author = StringField('Author', validators=[
-        validators.DataRequired('This is a required field')])
-    title = StringField('Last name', validators=[
-        validators.DataRequired('This is a required field')])
-    submit = SubmitField('Save')
-
-
-class UserCustomForm(FlaskForm):
-    first_name = StringField('First name', validators=[
-        validators.DataRequired('First name is required')])
-    last_name = StringField('Last name', validators=[
-        validators.DataRequired('Last name is required')])
-    email = StringField('Email', validators=[
-        validators.DataRequired('Email is required')])
-    # password = StringField('Password', validators=[
-    #     validators.DataRequired('Email is required')])
-    roles = SelectMultipleField(label='Roles', coerce=int)
-    submit = SubmitField('Save')
 
