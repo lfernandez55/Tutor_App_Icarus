@@ -73,6 +73,37 @@ def admin_list_users():
     users = User.query.all()
     return render_template('main/admin_list_users.html', users=users)
 
+@main_blueprint.route('/admin_create_user', methods=['GET', 'POST'] )
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_create_user():
+    form = UserCustomForm()
+
+    # adding the full set of select options to the select list (this is different than determining the default/selected options above)
+    rolesCollection = Role.query.all()
+    role_list = []
+    for role in rolesCollection:
+        role_list.append(role.name)
+    role_choices = list(enumerate(role_list,start=1))
+    form.roles.choices = role_choices
+
+
+    if form.validate_on_submit():
+        user = User()
+        user.first_name  = form.first_name.data
+        user.last_name = form.last_name.data
+        user.email = form.email.data
+        user.roles = []
+        for role_id in form.roles.data:
+            roleObj = Role.query.filter(Role.id == role_id).first()
+            user.roles.append(roleObj)
+        # todo: add in some password validations
+        user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('User Created!!', 'success')
+        return redirect(url_for('main.admin_list_users'))
+    return render_template('main/admin_edit_user.html', form=form)
+
 
 @main_blueprint.route('/admin_edit_user/<user_id>', methods=['GET', 'POST'] )
 @roles_required('admin')  # Limits access to users with the 'admin' role
@@ -149,10 +180,10 @@ def admin_create_roles():
     return redirect(url_for('main.admin_page'))
 
 
-@main_blueprint.route('/admin_create_user')
-@roles_required('admin')  # Limits access to users with the 'admin' role
-def admin_create_user():
-    return render_template('main/admin_create_user.html')
+# @main_blueprint.route('/admin_create_user')
+# @roles_required('admin')  # Limits access to users with the 'admin' role
+# def admin_create_user():
+#     return render_template('main/admin_create_user.html')
 
 @main_blueprint.route('/admin_teacher_or_admin')
 @roles_required(['admin', 'teacher'])  # requires admin OR teacher role
