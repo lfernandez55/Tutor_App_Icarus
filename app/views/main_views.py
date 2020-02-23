@@ -47,7 +47,6 @@ def admin_page():
 def user_profile_page():
     # Initialize form
     form = UserProfileForm(request.form, obj=current_user)
-
     # Process valid POST
     if request.method == 'POST' and form.validate():
         # Copy form fields to user_profile fields
@@ -102,7 +101,7 @@ def admin_create_user():
         db.session.commit()
         flash('User Created!!', 'success')
         return redirect(url_for('main.admin_list_users'))
-    return render_template('main/admin_edit_user.html', form=form)
+    return render_template('main/admin_create_user.html', form=form)
 
 
 @main_blueprint.route('/admin_edit_user/<user_id>', methods=['GET', 'POST'] )
