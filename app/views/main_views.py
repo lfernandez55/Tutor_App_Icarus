@@ -129,7 +129,7 @@ def admin_delete_user(user_id):
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_create_roles():
 
-    new_roles = ['super_user','reg_user']
+    new_roles = ['teacher','student']
     for new_role_name in new_roles:
         role = Role.query.filter(Role.name == new_role_name).first()
         if role == None:
@@ -152,18 +152,18 @@ def admin_create_roles():
 def admin_create_user():
     return render_template('main/admin_create_user.html')
 
-@main_blueprint.route('/admin_super_user_or_admin')
-@roles_required(['admin', 'super_user'])  # requires admin OR super_user role
-def admin_super_user_or_admin():
-    return "You have the right roles to access this page - it requires admin OR super_user roles"
+@main_blueprint.route('/admin_teacher_or_admin')
+@roles_required(['admin', 'teacher'])  # requires admin OR teacher role
+def admin_teacher_or_admin():
+    return "You have the right roles to access this page - it requires admin OR teacher roles"
 
-@main_blueprint.route('/admin_super_user_and_admin')
-@roles_required('admin','super_user')  # required admin AND super_user roles
-def admin_super_user_and_admin():
+@main_blueprint.route('/admin_teacher_and_admin')
+@roles_required('admin','teacher')  # required admin AND teacher roles
+def admin_teacher_and_admin():
     return "You have the right roles to access this view"
 
-@main_blueprint.route('/admin_reg_user')
-@roles_required('reg_user')  
-def admin_reg_user():
-    return "You have the right roles to access this page - requires reg_user role"
+@main_blueprint.route('/admin_student')
+@roles_required('student')  
+def admin_student():
+    return "You have the right roles to access this page - requires student role"
 

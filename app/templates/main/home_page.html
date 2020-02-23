@@ -14,9 +14,9 @@
   <p>(Administrator username and password is admin@example.com with password Password1)<p>
     <div><h3>Links for testing roles:</h3>
     <ul>
-      <li><a href="{{ url_for('main.admin_super_user_or_admin') }}" >Requires admin OR super_user role</a></li>
-      <li><a href="{{ url_for('main.admin_super_user_and_admin') }}" >Requires admin AND super_user role</a></li>
-      <li><a href="{{ url_for('main.admin_reg_user') }}" >Requires reg_user role</a></li>
+      <li><a href="{{ url_for('main.admin_teacher_or_admin') }}" >Requires admin OR teacher role</a></li>
+      <li><a href="{{ url_for('main.admin_teacher_and_admin') }}" >Requires admin AND teacher role</a></li>
+      <li><a href="{{ url_for('main.admin_student') }}" >Requires student role</a></li>
     </ul>
   </div>
 {% endblock %}
