@@ -12,7 +12,8 @@
 {% block page_content %}
   <h1>List Users</h1>
   <table class="table">
-  {% for user in users | sort(attribute=last_name) %}
+  {# {% for user in users | sort( attribute = email ) %}   #}
+  {% for user in users  %}
   <tr>
       <td>{{user.first_name}}</td>
       <td>{{user.last_name}}</td>

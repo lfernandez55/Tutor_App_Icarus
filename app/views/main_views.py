@@ -70,6 +70,7 @@ def user_profile_page():
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_list_users():
     users = User.query.all()
+    users = User.query.order_by(User.email.desc())
     return render_template('main/admin_list_users.html', users=users)
 
 @main_blueprint.route('/admin_create_user', methods=['GET', 'POST'] )
