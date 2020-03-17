@@ -1,5 +1,9 @@
 {% extends "main/main_base.html" %}  {# main/main_base.html extends layout.html #}
-
+{% block extra_css %}
+  <style>
+    form{margin: 10px 0}
+  </style>
+{% endblock %}
 {% block title %}{{app_name}}{% endblock %}
 
 {% block breadcrumb %}
@@ -11,6 +15,11 @@
 
 {% block page_content %}
   <h1>List Users</h1>
+  <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="text" name="search_term">
+    <input type="submit" value="Search Users">
+  </form>
   <table class="table">
   {# {% for user in users | sort( attribute = email ) %}   #}
   {% for user in users  %}

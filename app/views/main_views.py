@@ -66,11 +66,17 @@ def user_profile_page():
 # the following admin views list users, edit users, creat new users
 
 # The Admin page is accessible to users with the 'admin' role
-@main_blueprint.route('/admin_list_users')
+@main_blueprint.route('/admin_list_users', methods=['GET', 'POST'] )
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_list_users():
-    users = User.query.all()
-    users = User.query.order_by(User.email.desc())
+    if request.method == 'GET':
+        # users = User.query.all()
+        users = User.query.order_by(User.email.asc())
+    else:
+        search_term = request.form["search_term"]
+        search_term = "%{}%".format(search_term)
+        users = User.query.filter(User.email.like(search_term)).all()
+    
     return render_template('main/admin_list_users.html', users=users)
 
 @main_blueprint.route('/admin_create_user', methods=['GET', 'POST'] )
