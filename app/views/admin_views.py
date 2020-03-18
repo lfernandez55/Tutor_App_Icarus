@@ -4,8 +4,7 @@ from flask_user import current_user, login_required, roles_required
 
 from app import db
 from app.models.user_models import User, Role
-from app.forms.book_forms import BookForm
-from app.forms.main_forms import UserProfileForm, UserCustomForm
+from app.forms.admin_forms import UserCustomForm, RoleCustomForm
 
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
@@ -114,26 +113,20 @@ def admin_delete_user(user_id):
     flash('User Deleted!!', 'success')
     return redirect(url_for('admin.admin_list_users'))
 
-@admin_blueprint.route('/admin_create_roles')
+@admin_blueprint.route('/admin_create_role', methods=['GET', 'POST'])
 @roles_required('admin')  
-def admin_create_roles():
+def admin_create_role():
+    form = RoleCustomForm()
 
-    new_roles = ['teacher','student']
-    for new_role_name in new_roles:
-        role = Role.query.filter(Role.name == new_role_name).first()
-        if role == None:
-            new_role = Role()
-            new_role.name = new_role_name
-            db.session.add(new_role)
-            db.session.commit()
-   
-    roles = Role.query.all()
-    role_message = ""
-    for role in roles:
-        role_message = role.name + ", " + role_message 
-    role_message = "The following roles now exist in the db: " + role_message
-    flash(role_message, 'success')
-    return redirect(url_for('admin.admin_page'))
+    if form.validate_on_submit():
+        role = Role()
+        role.name  = form.name.data
+        role.label = form.label.data
+        db.session.add(role)
+        db.session.commit()
+        flash('Role Created!!', 'success')
+        return redirect(url_for('admin.admin_list_roles'))
+    return render_template('admin/admin_create_role.html', form=form)
 
 
 @admin_blueprint.route('/admin_list_roles', methods=['GET', 'POST'] )
@@ -159,7 +152,7 @@ def admin_delete_role(role_id):
 
 @admin_blueprint.route('/admin_edit_role/<role_id>', methods=['GET', 'POST'] )
 @roles_required('admin')  
-def admin_edit_role(user_id):
+def admin_edit_role(role_id):
     role = Role.query.filter(Role.id == role_id).first()
 
     form = RoleCustomForm(id=role.id, name=role.name)
