@@ -8,7 +8,7 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}" >Home</a> > 
-    <a href="{{ url_for('main.admin_page') }}" >Admin Page</a>
+    <a href="{{ url_for('admin.admin_page') }}" >Admin Page</a>
     > List Users
   </li>
 {% endblock %}
@@ -27,8 +27,8 @@
       <td>{{user.first_name}}</td>
       <td>{{user.last_name}}</td>
       <td>{{user.email}}</td>
-      <td><a href="{{ url_for('main.admin_edit_user', user_id=user.id) }}" >edit</a></td>
-      <td><a href="{{ url_for('main.admin_delete_user', user_id=user.id) }}" >delete</a></td>
+      <td><a href="{{ url_for('admin.admin_edit_user', user_id=user.id) }}" >edit</a></td>
+      <td><a href="{{ url_for('admin.admin_delete_user', user_id=user.id) }}" >delete</a></td>
   </tr>  
   {% endfor %}
 </table>

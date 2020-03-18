@@ -4,8 +4,9 @@
 
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
-    <a href="{{ url_for('main.admin_page') }}">Admin Page</a> >
-    > Create User
+    <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
+    <a href="{{ url_for('admin.admin_list_roles') }}">List Roles</a>
+    > Edit Role
 </li>
 {% endblock %}
 

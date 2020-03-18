@@ -1,0 +1,28 @@
+{% extends "main/main_base.html" %}  {# main/main_base.html extends layout.html #}
+{% block extra_css %}
+  <style>
+    form{margin: 10px 0}
+  </style>
+{% endblock %}
+{% block title %}{{app_name}}{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}" >Home</a> > 
+    <a href="{{ url_for('admin.admin_page') }}" >Admin Page</a>
+    > List Roles
+  </li>
+{% endblock %}
+
+{% block page_content %}
+  <h1>List Roles</h1>
+  <table class="table">
+  {# {% for user in users | sort( attribute = email ) %}   #}
+  {% for role in roles  %}
+  <tr>
+      <td>{{role.name}}</td>
+      <td><a href="{{ url_for('admin.admin_edit_role', role_id=role.id) }}" >edit</a></td>
+      <td><a href="{{ url_for('admin.admin_delete_role', role_id=role.id) }}" >delete</a></td>
+  </tr>  
+  {% endfor %}
+</table>
+{% endblock %}

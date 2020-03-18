@@ -46,7 +46,7 @@
               <ul class="nav navbar-nav" >
 
                   {% if call_or_get(current_user.is_authenticated) and isAdmin(current_user.email) %}
-                  <li><a href="{{ url_for('main.admin_page') }}" >Admin Pages</a></li>
+                  <li><a href="{{ url_for('admin.admin_page') }}" >Admin Pages</a></li>
                   {% endif %}
                   <li><a href="{{ url_for('main.member_page') }}" >User Pages</a></li>
 
