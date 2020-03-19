@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectMultipleField, SelectField, validators
+from wtforms import StringField, SubmitField, SelectMultipleField, SelectField, validators, PasswordField
 
 
 class UserCustomForm(FlaskForm):
@@ -9,7 +9,7 @@ class UserCustomForm(FlaskForm):
         validators.DataRequired('Last name is required')])
     email = StringField('Email', validators=[
         validators.DataRequired('Email is required')])
-    password = StringField('Password')
+    password = PasswordField('Password')
     roles = SelectMultipleField(label='Roles', coerce=int)
     submit = SubmitField('Save')
 

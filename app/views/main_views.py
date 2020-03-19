@@ -54,18 +54,5 @@ def user_profile_page():
     return render_template('main/user_profile_page.html',
                            form=form)
 
-@main_blueprint.route('/admin_teacher_or_admin')
-@roles_required(['admin', 'teacher'])  # requires admin OR teacher role
-def admin_teacher_or_admin():
-    return "You have the right roles to access this page - it requires admin OR teacher roles"
 
-@main_blueprint.route('/admin_teacher_and_admin')
-@roles_required('admin','teacher')  # required admin AND teacher roles
-def admin_teacher_and_admin():
-    return "You have the right roles to access this view"
-
-@main_blueprint.route('/admin_student')
-@roles_required('student')  
-def admin_student():
-    return "You have the right roles to access this page - requires student role"
 

@@ -72,36 +72,23 @@ def create_app(extra_config_settings={}):
     def context_processor():
         return dict(user_manager=user_manager)
 
-        # The below function (isAdmin) is called the nav of app/layout to determine
-    # whether the user is an admin
-    #see: https://junxiandoc.readthedocs.io/en/latest/docs/flask/flask_template.html
+    # for more on context processors see (search on "context"): 
+    # https://junxiandoc.readthedocs.io/en/latest/docs/flask/flask_template.html
     @app.context_processor
     def utility_processor():
-        # def isAdmin(user):
-
-        #     roleName = db.engine.execute("SELECT * FROM Roles")
-        #     sqlStatement = "SELECT roles.name FROM roles JOIN users_roles ON roles.id=users_roles.role_id JOIN users ON users.id=users_roles.user_id WHERE users.email='" + user + "' AND roles.name='admin'"
-        #     roleName = db.engine.execute(sqlStatement)
-        #     # Casting the returned alchemy query object into a list
-        #     # See https://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
-        #     roleName = [dict(row) for row in roleName]
-
-        #     if len(roleName) > 0 and roleName[0]['name'] == 'admin':
-        #         returnValue = 1
-        #     else:
-        #         returnValue = 0
-        #     return returnValue
-        # return dict(isAdmin=isAdmin)
-
         # renders the view if any of the passed in permitted_roles are in the current_user's roles
-        # todo:  works with admin role.  but what about teacher and student role
         def render(view,permitted_roles,linkname, current_user):
-            sqlStatement = "SELECT roles.name FROM roles JOIN users_roles ON roles.id=users_roles.role_id JOIN users ON users.id=users_roles.user_id WHERE users.email='" + current_user.email + "' AND roles.name='admin'"
+            # sqlStatement = "SELECT roles.name FROM roles JOIN users_roles ON roles.id=users_roles.role_id JOIN users ON users.id=users_roles.user_id WHERE users.email='" + current_user.email + "' AND roles.name='admin'"
+            sqlStatement = "SELECT roles.name FROM roles JOIN users_roles ON roles.id=users_roles.role_id JOIN users ON users.id=users_roles.user_id WHERE users.email='" + current_user.email + "'"
             roleName = db.engine.execute(sqlStatement)
             # Casting the returned alchemy query object into a list
             # See https://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
             roleName = [dict(row) for row in roleName]
-            if len(roleName) > 0 and roleName[0]['name'] in permitted_roles:
+            display_link = False
+            for user_role in roleName:
+                 if user_role['name'] in permitted_roles:
+                    display_link = True
+            if display_link:
                 link = "<a  href='" + url_for(view) + "'>" + linkname + "</a>"
                 return Markup(link)
         return dict(render=render)

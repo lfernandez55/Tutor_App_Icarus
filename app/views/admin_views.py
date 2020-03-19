@@ -128,27 +128,6 @@ def admin_create_role():
         return redirect(url_for('admin.admin_list_roles'))
     return render_template('admin/admin_create_role.html', form=form)
 
-# @admin_blueprint.route('/admin/create_role')
-# @roles_required('admin')  # Limits access to users with the 'admin' role
-# def admin_create_role():
-
-#     new_roles = ['teacher','student']
-#     for new_role_name in new_roles:
-#         role = Role.query.filter(Role.name == new_role_name).first()
-#         if role == None:
-#             new_role = Role()
-#             new_role.name = new_role_name
-#             db.session.add(new_role)
-#             db.session.commit()
-   
-#     roles = Role.query.all()
-#     role_message = ""
-#     for role in roles:
-#         role_message = role.name + ", " + role_message 
-#     role_message = "The following roles now exist in the db: " + role_message
-#     flash(role_message, 'success')
-#     return redirect(url_for('admin.admin_list_roles'))
-
 
 @admin_blueprint.route('/admin/list_roles', methods=['GET', 'POST'] )
 @roles_required('admin')  
@@ -185,3 +164,20 @@ def admin_edit_role(role_id):
         flash('Role Updated!!', 'success')
         return redirect(url_for('admin.admin_list_roles'))
     return render_template('admin/admin_edit_role.html', form=form)
+
+# the below views are for testing roles
+# you must create teacher and student roles to test them
+@admin_blueprint.route('/admin/teacher_or_admin')
+@roles_required(['admin', 'teacher'])  # requires admin OR teacher role
+def admin_teacher_or_admin():
+    return "You have the right roles to access this page - it requires admin OR teacher roles"
+
+@admin_blueprint.route('/admin/teacher_and_admin')
+@roles_required('admin','teacher')  # requires admin AND teacher roles
+def admin_teacher_and_admin():
+    return "You have the right roles to access this view"
+
+@admin_blueprint.route('/admin/student')
+@roles_required('student')  
+def admin_student():
+    return "You have the right roles to access this page - requires student role"

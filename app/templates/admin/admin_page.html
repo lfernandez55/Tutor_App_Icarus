@@ -15,4 +15,14 @@
   <a class="btn btn-default" href="{{ url_for('admin.admin_create_user') }}">Create User</a>
   <a class="btn btn-default" href="{{ url_for('admin.admin_list_roles') }}">List Roles</a>
   <a class="btn btn-default" href="{{ url_for('admin.admin_create_role') }}">Create Role</a>
+
+  <div>
+    <h3>Links for testing roles:</h3>
+    <h6>(To thoroughly test requires admin, teacher and student roles in db )</h6>
+    <ul>
+      <li><a href="{{ url_for('admin.admin_teacher_or_admin') }}" >Requires admin OR teacher role</a></li>
+      <li><a href="{{ url_for('admin.admin_teacher_and_admin') }}" >Requires admin AND teacher role</a></li>
+      <li><a href="{{ url_for('admin.admin_student') }}" >Requires student role</a></li>
+    </ul>
+  </div>
 {% endblock %}
