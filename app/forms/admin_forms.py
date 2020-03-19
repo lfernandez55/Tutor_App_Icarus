@@ -16,5 +16,5 @@ class UserCustomForm(FlaskForm):
 class RoleCustomForm(FlaskForm):
     name = StringField('Role name', validators=[
         validators.DataRequired('Role name is required')])
-    label = StringField('Role label')
+    # label = StringField('Role label')
     submit = SubmitField('Save')

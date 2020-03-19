@@ -13,7 +13,7 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 def admin_page():
     return render_template('admin/admin_page.html')
 
-@admin_blueprint.route('/admin_list_users', methods=['GET', 'POST'] )
+@admin_blueprint.route('/admin/list_users', methods=['GET', 'POST'] )
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_list_users():
     if request.method == 'GET':
@@ -26,7 +26,7 @@ def admin_list_users():
     
     return render_template('admin/admin_list_users.html', users=users)  
 
-@admin_blueprint.route('/admin_create_user', methods=['GET', 'POST'] )
+@admin_blueprint.route('/admin/create_user', methods=['GET', 'POST'] )
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_create_user():
     form = UserCustomForm()
@@ -59,7 +59,7 @@ def admin_create_user():
 
 
 
-@admin_blueprint.route('/admin_edit_user/<user_id>', methods=['GET', 'POST'] )
+@admin_blueprint.route('/admin/edit_user/<user_id>', methods=['GET', 'POST'] )
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_edit_user(user_id):
     user = User.query.filter(User.id == user_id).first()
@@ -104,7 +104,7 @@ def admin_edit_user(user_id):
     return render_template('admin/admin_edit_user.html', form=form)
 
 
-@admin_blueprint.route('/admin_delete_user/<user_id>')
+@admin_blueprint.route('/admin/delete_user/<user_id>')
 @roles_required('admin')  
 def admin_delete_user(user_id):
     user = User.query.filter(User.id == user_id).first()
@@ -113,7 +113,7 @@ def admin_delete_user(user_id):
     flash('User Deleted!!', 'success')
     return redirect(url_for('admin.admin_list_users'))
 
-@admin_blueprint.route('/admin_create_role', methods=['GET', 'POST'])
+@admin_blueprint.route('/admin/create_role', methods=['GET', 'POST'])
 @roles_required('admin')  
 def admin_create_role():
     form = RoleCustomForm()
@@ -121,15 +121,36 @@ def admin_create_role():
     if form.validate_on_submit():
         role = Role()
         role.name  = form.name.data
-        role.label = form.label.data
+        # role.label = form.label.data
         db.session.add(role)
         db.session.commit()
         flash('Role Created!!', 'success')
         return redirect(url_for('admin.admin_list_roles'))
     return render_template('admin/admin_create_role.html', form=form)
 
+# @admin_blueprint.route('/admin/create_role')
+# @roles_required('admin')  # Limits access to users with the 'admin' role
+# def admin_create_role():
 
-@admin_blueprint.route('/admin_list_roles', methods=['GET', 'POST'] )
+#     new_roles = ['teacher','student']
+#     for new_role_name in new_roles:
+#         role = Role.query.filter(Role.name == new_role_name).first()
+#         if role == None:
+#             new_role = Role()
+#             new_role.name = new_role_name
+#             db.session.add(new_role)
+#             db.session.commit()
+   
+#     roles = Role.query.all()
+#     role_message = ""
+#     for role in roles:
+#         role_message = role.name + ", " + role_message 
+#     role_message = "The following roles now exist in the db: " + role_message
+#     flash(role_message, 'success')
+#     return redirect(url_for('admin.admin_list_roles'))
+
+
+@admin_blueprint.route('/admin/list_roles', methods=['GET', 'POST'] )
 @roles_required('admin')  
 def admin_list_roles():
     roles = Role.query.order_by(Role.name.asc())
@@ -139,7 +160,7 @@ def admin_list_roles():
 
 
 
-@admin_blueprint.route('/admin_delete_role/<role_id>')
+@admin_blueprint.route('/admin/delete_role/<role_id>')
 @roles_required('admin')  
 def admin_delete_role(role_id):
     role = Role.query.filter(Role.id == role_id).first()
@@ -150,7 +171,7 @@ def admin_delete_role(role_id):
 
 
 
-@admin_blueprint.route('/admin_edit_role/<role_id>', methods=['GET', 'POST'] )
+@admin_blueprint.route('/admin/edit_role/<role_id>', methods=['GET', 'POST'] )
 @roles_required('admin')  
 def admin_edit_role(role_id):
     role = Role.query.filter(Role.id == role_id).first()

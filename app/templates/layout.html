@@ -15,6 +15,7 @@
         .no-margins { margin: 0px; }
         .with-margins { margin: 10px; }
         .col-centered { float: none; margin: 0 auto; }
+        .active-link{color:white !important}
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries x-->
@@ -45,8 +46,8 @@
           <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav" >
 
-                  {% if call_or_get(current_user.is_authenticated) and isAdmin(current_user.email) %}
-                  <li><a href="{{ url_for('admin.admin_page') }}" >Admin Pages</a></li>
+                  {% if call_or_get(current_user.is_authenticated)  %}
+                  <li>{{render('admin.admin_page',['admin'],'Home Page', current_user)}}</li>
                   {% endif %}
                   <li><a href="{{ url_for('main.member_page') }}" >User Pages</a></li>
 
@@ -112,7 +113,7 @@
     <hr class="no-margins"/>
     <div id="footer-div" class="clearfix with-margins">
         <div class="pull-left">{{ user_manager.USER_APP_NAME }} v1.0</div>
-        <div class="pull-right">&copy; 2019 Fine Books</div>
+        <div class="pull-right">&copy;</div>
     </div>
     {% endblock %}
 
@@ -121,6 +122,17 @@
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <!-- Bootstrap -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script>
+      //used to make nav link active when a particular link is clicked on
+      //or it's sub links
+      var menuLinks = document.querySelectorAll("ul.nav a");
+      for(x=0;x<menuLinks.length;x++){
+          if (window.location.href.indexOf(menuLinks[x].href) != -1){  
+              menuLinks[x].classList.add("active-link")
+          }
+      }
+  </script>
 
     {# *** Allow sub-templates to insert extra html to the bottom of the body *** #}
     {% block extra_js %}{% endblock %}
