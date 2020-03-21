@@ -26,7 +26,8 @@ class User(db.Model, UserMixin):
     # Relationships
     roles = db.relationship('Role', secondary='users_roles',
                             backref=db.backref('users', lazy='dynamic'))
-
+    # tutor = db.relationship("Tutor", uselist=False, back_populates="users")
+    tutor = db.relationship("Tutor", backref='users', cascade='all')
 
 # Define the Role data model
 class Role(db.Model):
@@ -44,5 +45,15 @@ class UsersRoles(db.Model):
     role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
 
 
+# class Child(Base):
+#     __tablename__ = 'child'
+#     id = Column(Integer, primary_key=True)
+#     parent_id = Column(Integer, ForeignKey('parent.id'))
+#     parent = relationship("Parent", back_populates="child")
 
+class Tutor(db.Model):
+    __tablename__ = 'tutor'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    tutor_phone = db.Column(db.String(50), nullable=False)
 

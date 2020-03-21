@@ -30,7 +30,7 @@ def admin_list_users():
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_create_user():
     form = UserCustomForm()
-
+    
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     rolesCollection = Role.query.all()
     role_list = []
@@ -39,6 +39,10 @@ def admin_create_user():
     role_choices = list(enumerate(role_list,start=1))
     form.roles.choices = role_choices
 
+    # if form.add_child.data:
+    #     # tutor_form = TutorCustomForm()
+    #     form.children.append_entry()
+    #     return render_template('admin/admin_create_user.html', form=form)
 
     if form.validate_on_submit():
         user = User()
@@ -49,10 +53,15 @@ def admin_create_user():
         for role_id in form.roles.data:
             roleObj = Role.query.filter(Role.id == role_id).first()
             user.roles.append(roleObj)
+        print("dddddddddddddddd",form.tutor.data['phone'], user.id )
         # todo: add in some password validations
         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        print('zzzzzzzzzzzzz',user.id)
+        
+
+
         flash('User Created!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
     return render_template('admin/admin_create_user.html', form=form)
