@@ -3,8 +3,8 @@ from flask import request, url_for, current_app
 from flask_user import current_user, login_required, roles_required
 
 from app import db
-from app.models.user_models import User, Role
-from app.forms.admin_forms import UserCustomForm, RoleCustomForm
+from app.models.user_models import User, Role, Tutor
+from app.forms.admin_forms import UserCustomForm, RoleCustomForm, TutorCustomForm
 
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
@@ -53,20 +53,62 @@ def admin_create_user():
         for role_id in form.roles.data:
             roleObj = Role.query.filter(Role.id == role_id).first()
             user.roles.append(roleObj)
-        print("dddddddddddddddd",form.tutor.data['phone'], user.id )
         # todo: add in some password validations
         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        print('zzzzzzzzzzzzz',user.id)
-        
 
+        # tutor = Tutor()
+        # tutor.tutor_phone = form.tutor.data['phone']
+        # tutor.user_id = user.id
+        # db.session.add(tutor)
+        # db.session.commit()
 
         flash('User Created!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
     return render_template('admin/admin_create_user.html', form=form)
 
+@admin_blueprint.route('/admin/create_tutor', methods=['GET', 'POST'] )
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_create_tutor():
+    form = TutorCustomForm()
+    
+    # adding the full set of select options to the select list (this is different than determining the default/selected options above)
+    rolesCollection = Role.query.all()
+    role_list = []
+    for role in rolesCollection:
+        role_list.append(role.name)
+    role_choices = list(enumerate(role_list,start=1))
+    form.roles.choices = role_choices
 
+    print(form)
+    if form.add_child.data:
+        form.dates.append_entry()
+        return render_template('admin/admin_create_tutor.html', form=form)
+
+    if form.validate_on_submit():
+        user = User()
+        user.first_name  = form.first_name.data
+        user.last_name = form.last_name.data
+        user.email = form.email.data
+        user.roles = []
+        for role_id in form.roles.data:
+            roleObj = Role.query.filter(Role.id == role_id).first()
+            user.roles.append(roleObj)
+        # todo: add in some password validations
+        user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+
+        # tutor = Tutor()
+        # tutor.tutor_phone = form.tutor.data['phone']
+        # tutor.user_id = user.id
+        # db.session.add(tutor)
+        # db.session.commit()
+
+        flash('User Created!!', 'success')
+        return redirect(url_for('admin.admin_list_users'))
+    return render_template('admin/admin_create_tutor.html', form=form)
 
 @admin_blueprint.route('/admin/edit_user/<user_id>', methods=['GET', 'POST'] )
 @roles_required('admin')  # Limits access to users with the 'admin' role

@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectMultipleField, SelectField, validators, PasswordField, FieldList, FormField
+from wtforms import StringField, SubmitField, SelectMultipleField, SelectField, validators, PasswordField, FieldList, FormField, IntegerField
 
-class TutorCustomForm(FlaskForm):
-    phone = StringField(label='Phone')
-
+class TimeCustomForm(FlaskForm):
+    timeDay = IntegerField(label="Day of Week")
+    timeStart = StringField(label='Time Start')
+    timeEnd = StringField(label='Time End')
     class Meta:
         # No need for csrf token in this child form
         csrf = False
@@ -19,7 +20,7 @@ class UserCustomForm(FlaskForm):
     password = PasswordField('Password')
     roles = SelectMultipleField(label='Roles', coerce=int)
 
-    tutor = FormField(TutorCustomForm, 'Tutor Specific Fields')
+    # tutor = FormField(TutorCustomForm, 'Tutor Specific Fields')
     # add_child = SubmitField(label='Tutor Specific Info')
 
     submit = SubmitField('Save')
@@ -30,3 +31,11 @@ class RoleCustomForm(FlaskForm):
     # label = StringField('Role label')
     submit = SubmitField('Save')
 
+    class Meta:
+        # No need for csrf token in this child form
+        csrf = False
+
+class TutorCustomForm(UserCustomForm):
+    phone = StringField(label='Phone')
+    dates = FieldList(FormField(TimeCustomForm), label='dates')
+    add_child = SubmitField(label='Add Date')
