@@ -24,12 +24,17 @@
             {{render_field(form.password)}}
             {{render_field(form.roles)}}
             {{render_field(form.phone)}}
-
+            
             {% for childform in form.dates %}
+                <fieldset class="form-group">
                 {% for field in childform %}
-                    {{render_field(field)}}  
+                    {{render_field(field)}}
                 {% endfor %}
-            {% endfor %}
+                </fieldset>
+            {% endfor %}     
+
+             
+
             {{render_submit_field(form.add_child)}}
             {{render_submit_field(form.submit)}}
 

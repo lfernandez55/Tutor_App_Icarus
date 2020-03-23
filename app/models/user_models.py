@@ -57,3 +57,9 @@ class Tutor(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     tutor_phone = db.Column(db.String(50), nullable=False)
 
+# class Time(db.Model):
+#     __tablename__ = 'tutor'
+#     id = db.Column(db.Integer(), primary_key=True)
+#     time_day = db.Column(db.Integer())
+#     time_start = 
+#     time_end = 

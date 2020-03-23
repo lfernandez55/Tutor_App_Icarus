@@ -72,7 +72,11 @@ def admin_create_user():
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_create_tutor():
     form = TutorCustomForm()
-    
+    form.first_name.data = "luke"
+    form.last_name.data = "fern"   
+    form.email.data="fern@weber.edu"
+    form.phone.data="8015409771"
+
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     rolesCollection = Role.query.all()
     role_list = []
@@ -81,7 +85,7 @@ def admin_create_tutor():
     role_choices = list(enumerate(role_list,start=1))
     form.roles.choices = role_choices
 
-    print(form)
+    print(role_choices)
     if form.add_child.data:
         form.dates.append_entry()
         return render_template('admin/admin_create_tutor.html', form=form)
@@ -100,15 +104,21 @@ def admin_create_tutor():
         db.session.add(user)
         db.session.commit()
 
-        # tutor = Tutor()
-        # tutor.tutor_phone = form.tutor.data['phone']
-        # tutor.user_id = user.id
-        # db.session.add(tutor)
-        # db.session.commit()
+        tutor = Tutor()
+        tutor.tutor_phone = form.tutor.data['phone']
+        tutor.user_id = user.id
+        db.session.add(tutor)
+        db.session.commit()
+
+        for date_group in form.dates:
+            print(date_group['time_day'], date_group['time_start'], date_group['time_end'])
+            
+
 
         flash('User Created!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
     return render_template('admin/admin_create_tutor.html', form=form)
+
 
 @admin_blueprint.route('/admin/edit_user/<user_id>', methods=['GET', 'POST'] )
 @roles_required('admin')  # Limits access to users with the 'admin' role
