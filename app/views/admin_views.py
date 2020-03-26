@@ -3,7 +3,7 @@ from flask import request, url_for, current_app
 from flask_user import current_user, login_required, roles_required
 
 from app import db
-from app.models.user_models import User, Role, Tutor
+from app.models.user_models import User, Role, Tutor, Time
 from app.forms.admin_forms import UserCustomForm, RoleCustomForm, TutorCustomForm
 
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
@@ -105,19 +105,68 @@ def admin_create_tutor():
         db.session.commit()
 
         tutor = Tutor()
-        tutor.tutor_phone = form.tutor.data['phone']
+        tutor.tutor_phone = form.phone.data
         tutor.user_id = user.id
         db.session.add(tutor)
         db.session.commit()
 
         for date_group in form.dates:
-            print(date_group['time_day'], date_group['time_start'], date_group['time_end'])
-            
+            print(date_group['time_day'].data, date_group['time_start'].data, date_group['time_end'].data)
+            time = Time()
+            time.time_day = date_group['time_day'].data
+            time.time_start = date_group['time_start'].data
+            time.time_end = date_group['time_end'].data
+            time.tutor_id = tutor.id
+            db.session.add(time)
+            db.session.commit()
 
 
         flash('User Created!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
     return render_template('admin/admin_create_tutor.html', form=form)
+
+@admin_blueprint.route('/admin/edit_tutor/<user_id>', methods=['GET', 'POST'] )
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_edit_tutor(user_id):
+    user = User.query.filter(User.id == user_id).first()
+    
+    print("XXXXXXXXXXXXXXXXXXXXX:")
+    print(user.first_name)
+    print(user.phone)
+    # todo: add a relationship column to Tutor so i can access the times
+
+    # determining the default options to be selected (notice how they are loaded when the form is instantiated)
+    current_roles = []
+    for role in user.roles:
+        current_roles.append(str(role.id))
+
+    form = UserCustomForm(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, roles=current_roles)
+
+    # adding the full set of select options to the select list (this is different than determining the default/selected options above)
+    rolesCollection = Role.query.all()
+    role_list = []
+    for role in rolesCollection:
+        role_list.append(role.name)
+    role_choices = list(enumerate(role_list,start=1))
+    form.roles.choices = role_choices
+
+
+    # if form.validate_on_submit():
+    #     user.first_name  = form.first_name.data
+    #     user.last_name = form.last_name.data
+    #     user.email = form.email.data
+    #     user.roles = []
+    #     for role_id in form.roles.data:
+    #         roleObj = Role.query.filter(Role.id == role_id).first()
+    #         user.roles.append(roleObj)
+    #     if form.password.data != "":
+    #         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
+    #     db.session.add(user)
+    #     db.session.commit()
+    #     flash('User Updated!!', 'success')
+    #     return redirect(url_for('admin.admin_list_users'))
+    return render_template('admin/admin_edit_user.html', form=form)
+
 
 
 @admin_blueprint.route('/admin/edit_user/<user_id>', methods=['GET', 'POST'] )
