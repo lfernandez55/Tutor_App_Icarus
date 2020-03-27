@@ -132,15 +132,17 @@ def admin_edit_tutor(user_id):
     
     print("XXXXXXXXXXXXXXXXXXXXX:")
     print(user.first_name)
-    print(user.phone)
-    # todo: add a relationship column to Tutor so i can access the times
+    # the user.tutor doesn't have to be iterated through becuz in the model we defined it the backref as uselist='false'
+    print(user.tutor.tutor_phone)
+    print(user.tutor.dates)
 
     # determining the default options to be selected (notice how they are loaded when the form is instantiated)
     current_roles = []
     for role in user.roles:
         current_roles.append(str(role.id))
 
-    form = UserCustomForm(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, roles=current_roles)
+    form = TutorCustomForm(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, 
+    roles=current_roles, phone=user.tutor.tutor_phone, dates=user.tutor.dates)
 
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     rolesCollection = Role.query.all()
@@ -151,21 +153,33 @@ def admin_edit_tutor(user_id):
     form.roles.choices = role_choices
 
 
-    # if form.validate_on_submit():
-    #     user.first_name  = form.first_name.data
-    #     user.last_name = form.last_name.data
-    #     user.email = form.email.data
-    #     user.roles = []
-    #     for role_id in form.roles.data:
-    #         roleObj = Role.query.filter(Role.id == role_id).first()
-    #         user.roles.append(roleObj)
-    #     if form.password.data != "":
-    #         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
-    #     db.session.add(user)
-    #     db.session.commit()
-    #     flash('User Updated!!', 'success')
-    #     return redirect(url_for('admin.admin_list_users'))
-    return render_template('admin/admin_edit_user.html', form=form)
+    if form.validate_on_submit():
+        user.first_name  = form.first_name.data
+        user.last_name = form.last_name.data
+        user.email = form.email.data
+        user.roles = []
+        for role_id in form.roles.data:
+            roleObj = Role.query.filter(Role.id == role_id).first()
+            user.roles.append(roleObj)
+        if form.password.data != "":
+            user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
+
+        user.tutor.tutor_phone = form.phone.data
+        for x, date_group in enumerate(form.dates):
+            print(date_group['time_day'].data, date_group['time_start'].data, date_group['time_end'].data)
+            user.tutor.dates[x].time_day = date_group['time_day'].data
+            user.tutor.dates[x].time_start = date_group['time_start'].data
+            user.tutor.dates[x].time_end = date_group['time_end'].data
+        db.session.add(user)
+        db.session.commit()
+
+
+
+
+
+        flash('User Updated!!', 'success')
+        return redirect(url_for('admin.admin_list_users'))
+    return render_template('admin/admin_edit_tutor.html', form=form)
 
 
 
