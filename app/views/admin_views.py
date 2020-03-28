@@ -168,20 +168,32 @@ def admin_edit_tutor(user_id):
             user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
 
         user.tutor.tutor_phone = form.phone.data
-        for x, date_group in enumerate(form.dates):
-            print(date_group['time_day'].data, date_group['time_start'].data, date_group['time_end'].data)
-            if x < len(user.tutor.dates):
-                user.tutor.dates[x].time_day = date_group['time_day'].data
-                user.tutor.dates[x].time_start = date_group['time_start'].data
-                user.tutor.dates[x].time_end = date_group['time_end'].data
+
+        
+        # for x, date_group in enumerate(form.dates):
+            # print(date_group['time_day'].data, date_group['time_start'].data, date_group['time_end'].data)
+            # if x < len(user.tutor.dates):
+            #     user.tutor.dates[x].time_day = date_group['time_day'].data
+            #     user.tutor.dates[x].time_start = date_group['time_start'].data
+            #     user.tutor.dates[x].time_end = date_group['time_end'].data
+            # else:
+            #     time = Time()
+            #     time.time_day = date_group['time_day'].data
+            #     time.time_start = date_group['time_start'].data
+            #     time.time_end = date_group['time_end'].data
+            #     time.tutor_id = user.tutor.id
+            #     db.session.add(time)
+            #     db.session.commit()
+        # commented out code above is alternative way of doing below:
+        for date_group in form.dates:
+            if date_group['id'].data != "":
+               time = Time.query.filter(Time.id == date_group['id'].data).first()
             else:
-                time = Time()
-                time.time_day = date_group['time_day'].data
-                time.time_start = date_group['time_start'].data
-                time.time_end = date_group['time_end'].data
-                time.tutor_id = user.tutor.id
-                db.session.add(time)
-                db.session.commit()
+               time = Time()
+            time.time_day = date_group['time_day'].data
+            time.time_start = date_group['time_start'].data
+            time.time_end = date_group['time_end'].data
+            user.tutor.dates.append(time)
         db.session.add(user)
         db.session.commit()
 

@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectMultipleField, SelectField, validators, PasswordField, FieldList, FormField, IntegerField
+from wtforms import StringField, SubmitField, SelectMultipleField, SelectField, validators, PasswordField, FieldList, FormField, IntegerField, HiddenField
 from wtforms_components import TimeField
 
 class TimeCustomForm(FlaskForm):
+    id = HiddenField(label="")
     time_day = SelectField(label="Day of Week",choices=[(1,'Monday'),(2,'Tuesday'),(3,'Wednesday'),(4,'Thursday'),(5,'Friday')], coerce=int)
     time_start = TimeField(label='Time Start') #see: https://stackoverflow.com/questions/44020690/wtforms-equivalent-to-input-type-time
     time_end = TimeField(label='Time End')
