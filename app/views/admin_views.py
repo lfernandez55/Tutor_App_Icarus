@@ -152,6 +152,9 @@ def admin_edit_tutor(user_id):
     role_choices = list(enumerate(role_list,start=1))
     form.roles.choices = role_choices
 
+    if form.add_child.data:
+        form.dates.append_entry()
+        return render_template('admin/admin_create_tutor.html', form=form)
 
     if form.validate_on_submit():
         user.first_name  = form.first_name.data
@@ -167,9 +170,18 @@ def admin_edit_tutor(user_id):
         user.tutor.tutor_phone = form.phone.data
         for x, date_group in enumerate(form.dates):
             print(date_group['time_day'].data, date_group['time_start'].data, date_group['time_end'].data)
-            user.tutor.dates[x].time_day = date_group['time_day'].data
-            user.tutor.dates[x].time_start = date_group['time_start'].data
-            user.tutor.dates[x].time_end = date_group['time_end'].data
+            if x < len(user.tutor.dates):
+                user.tutor.dates[x].time_day = date_group['time_day'].data
+                user.tutor.dates[x].time_start = date_group['time_start'].data
+                user.tutor.dates[x].time_end = date_group['time_end'].data
+            else:
+                time = Time()
+                time.time_day = date_group['time_day'].data
+                time.time_start = date_group['time_start'].data
+                time.time_end = date_group['time_end'].data
+                time.tutor_id = user.tutor.id
+                db.session.add(time)
+                db.session.commit()
         db.session.add(user)
         db.session.commit()
 
