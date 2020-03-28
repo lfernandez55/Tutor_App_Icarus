@@ -11,12 +11,15 @@
 
 {% block page_content %}
   <h1>Admin Page</h1>
-  <a class="btn btn-default" href="{{ url_for('admin.admin_list_users') }}">List Users</a>
+  <a class="btn btn-default" href="{{ url_for('admin.admin_list_users') }}">Users</a>
+  {#  
   <a class="btn btn-default" href="{{ url_for('admin.admin_create_user') }}">Create User</a>
   <a class="btn btn-default" href="{{ url_for('admin.admin_create_tutor') }}">Create Tutor</a>
-  <a class="btn btn-default" href="{{ url_for('admin.admin_list_roles') }}">List Roles</a>
+  #}
+  <a class="btn btn-default" href="{{ url_for('admin.admin_list_roles') }}">Roles</a>
+  {#  
   <a class="btn btn-default" href="{{ url_for('admin.admin_create_role') }}">Create Role</a>
-
+  #}
   <div>
     <h3>Links for testing roles:</h3>
     <h6>(To thoroughly test requires admin, teacher and student roles in db )</h6>

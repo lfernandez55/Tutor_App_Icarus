@@ -33,9 +33,9 @@ class RoleCustomForm(FlaskForm):
     # label = StringField('Role label')
     submit = SubmitField('Save')
 
-    class Meta:
-        # No need for csrf token in this child form
-        csrf = False
+    # class Meta:
+    #     # No need for csrf token in this child form
+    #     csrf = False
 
 class TutorCustomForm(UserCustomForm):
     phone = StringField(label='Phone')
