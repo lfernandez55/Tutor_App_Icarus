@@ -24,24 +24,43 @@
             {{render_field(form.password)}}
             {{render_field(form.roles)}}
             {{render_field(form.phone)}}
-            
+            {{render_field(form.remove_time_id)}}
+
             {% for childform in form.dates %}
                 <fieldset class="form-group">
                 {% for field in childform %}
                     {{render_field(field)}}
                 {% endfor %}
+                <a class="remove-time" name="remove_time_link" id="{{loop.index}}">Remove {{loop.index}}</a>
                 </fieldset>
             {% endfor %}     
 
              
 
-            {{render_submit_field(form.add_child)}}
+            {{render_submit_field(form.add_time)}}
+            {{render_submit_field(form.remove_time)}}
             {{render_submit_field(form.submit)}}
 
         </form>
     </div>
 </div>
 <br/>
+<script>
+    var collection = document.getElementsByName('remove_time_link');
+    for(var x=0; x < collection.length; x++){
+        console.log('DDDDDD')
+        collection[x].addEventListener('click',function(){clickMe(this)})
+    }
 
-
+    function clickMe(elem){
+        alert('DDDD')
+        document.getElementById("remove_time_id").value = elem.id;
+        document.getElementsByName("remove_time")[0].click();
+    }
+</script>
+<style>
+    .remove-time{
+        cursor: pointer;
+    }
+</style>
 {% endblock %}

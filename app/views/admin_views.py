@@ -152,9 +152,23 @@ def admin_edit_tutor(user_id):
     role_choices = list(enumerate(role_list,start=1))
     form.roles.choices = role_choices
 
-    if form.add_child.data:
+    if form.add_time.data:
         form.dates.append_entry()
-        return render_template('admin/admin_create_tutor.html', form=form)
+        return render_template('admin/admin_edit_tutor.html', form=form)
+
+    if form.remove_time.data:
+        print("DDDDDDDD", form.remove_time_id.data)
+
+        # for date_group in form.dates:
+        #     try:
+        #         popped_entry = form.dates.pop_entry()
+        #         print("popped entry", popped_entry.data['id'])
+        #         child = Child.query.filter(Child.id == popped_entry.data['id']).first()
+        #         db.session.delete(child)
+        #         db.session.commit()
+        #     except:
+        #         print("An exception occurred, you were probably trying to remove a child form that was blank")
+        return render_template('admin/admin_edit_tutor.html', form=form)
 
     if form.validate_on_submit():
         user.first_name  = form.first_name.data
