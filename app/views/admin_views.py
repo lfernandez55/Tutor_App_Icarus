@@ -86,7 +86,7 @@ def admin_create_tutor():
     form.roles.choices = role_choices
 
     print(role_choices)
-    if form.add_child.data:
+    if form.add_time.data:
         form.dates.append_entry()
         return render_template('admin/admin_create_tutor.html', form=form)
 
@@ -158,16 +158,28 @@ def admin_edit_tutor(user_id):
 
     if form.remove_time.data:
         print("DDDDDDDD", form.remove_time_id.data)
+        print("xxxxxxx", type(form.dates), len(form.dates))
 
-        # for date_group in form.dates:
-        #     try:
-        #         popped_entry = form.dates.pop_entry()
-        #         print("popped entry", popped_entry.data['id'])
-        #         child = Child.query.filter(Child.id == popped_entry.data['id']).first()
-        #         db.session.delete(child)
-        #         db.session.commit()
-        #     except:
-        #         print("An exception occurred, you were probably trying to remove a child form that was blank")
+        # since we are popping off items from the end of the list rather than the beginning the index of the item to remove is:
+        index_of_item_to_remove = len(form.dates) - int(form.remove_time_id.data)
+
+        # pop off all the items in the fieldlist, and append them to the reverselist with the exception of the item to remove
+        reversed_list = []
+        number_of_dates = len(form.dates)
+        for x in range(number_of_dates ):
+            if index_of_item_to_remove == x:
+                popped_entry = form.dates.pop_entry()
+            else:
+                reversed_list.append(form.dates.pop_entry())
+
+        # reverse the reversedlist and repopulate form.dates
+        form.dates = list(reversed(reversed_list))
+        print("popped_entry.data['id']", popped_entry.data['id'])
+        if popped_entry.data['id']:
+                child = Time.query.filter(Time.id == popped_entry.data['id']).first()
+                db.session.delete(child)
+                db.session.commit()
+
         return render_template('admin/admin_edit_tutor.html', form=form)
 
     if form.validate_on_submit():

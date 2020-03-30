@@ -40,7 +40,7 @@ class RoleCustomForm(FlaskForm):
 
 class TutorCustomForm(UserCustomForm):
     phone = StringField(label='Phonex')
-    remove_time_id = StringField(label="Foo")
+    remove_time_id = HiddenField(label="")
     dates = FieldList(FormField(TimeCustomForm), label='dates')
     add_time = SubmitField(label='Add Date')
     remove_time = SubmitField(label='Remove Date')

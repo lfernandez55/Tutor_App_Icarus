@@ -46,6 +46,7 @@
 </div>
 <br/>
 <script>
+    document.getElementsByName('remove_time')[0].style.display='none'
     var collection = document.getElementsByName('remove_time_link');
     for(var x=0; x < collection.length; x++){
         console.log('DDDDDD')
@@ -53,7 +54,6 @@
     }
 
     function clickMe(elem){
-        alert('DDDD')
         document.getElementById("remove_time_id").value = elem.id;
         document.getElementsByName("remove_time")[0].click();
     }
