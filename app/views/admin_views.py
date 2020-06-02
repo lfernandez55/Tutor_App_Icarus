@@ -72,10 +72,10 @@ def admin_create_user():
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_create_tutor():
     form = TutorCustomForm()
-    form.first_name.data = "luke"
-    form.last_name.data = "fern"   
-    form.email.data="fern@weber.edu"
-    form.phone.data="8015409771"
+    # form.first_name.data = "luke"
+    # form.last_name.data = "fern"   
+    # form.email.data="fern@weber.edu"
+    # form.phone.data="8015409771"
 
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     rolesCollection = Role.query.all()
@@ -133,8 +133,21 @@ def admin_edit_tutor(user_id):
     print("XXXXXXXXXXXXXXXXXXXXX:")
     print(user.first_name)
     # the user.tutor doesn't have to be iterated through becuz in the model we defined it the backref as uselist='false'
-    print(user.tutor.tutor_phone)
-    print(user.tutor.dates)
+    # print(user.tutor.tutor_phone)
+    # print(user.tutor.dates)
+
+    # need the below for admin and member accounts that don't be default have tutor info
+    # if user.tutor is None:
+    #     phone_var = ""
+    #     dates_var = ""
+    # else:
+    #     phone_var = user.tutor.tutor_phone
+    #     dates_var = user.tutor.dates
+    #     # tutor = Tutor()
+    #     # tutor.tutor_phone = "1-111-111-1111"
+    #     # tutor.user_id = user.id
+    #     # db.session.add(tutor)
+    #     # db.session.commit()
 
     # determining the default options to be selected (notice how they are loaded when the form is instantiated)
     current_roles = []

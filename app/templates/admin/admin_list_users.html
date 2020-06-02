@@ -27,7 +27,8 @@
       </form>
     </div>
     <div class="col-sm-6 text-right">
-      <a class="btn btn-default btn-primary" href="{{ url_for('admin.admin_create_tutor') }}">Create User</a>
+      <a class="btn btn-default btn-primary" href="{{ url_for('admin.admin_create_user') }}">Create User</a>
+      <a class="btn btn-default btn-primary" href="{{ url_for('admin.admin_create_tutor') }}">Create Tutor</a>
     </div>
   </div>
 
@@ -35,12 +36,34 @@
     <div class="col-sm-12">
       <table class="table">
         {# {% for user in users | sort( attribute = email ) %}   #}
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Roles</th>
+          <th></th>
+          <th></th>
+        </tr>
         {% for user in users  %}
         <tr>
           <td>{{user.first_name}}</td>
           <td>{{user.last_name}}</td>
           <td>{{user.email}}</td>
+          <td>
+            {% set tutor = namespace(total=0) %}
+            {% for role in user.roles  %}
+                {{role.name}}
+                {% if role.name == "Tutor" %}
+                {% set tutor.total = 1 %}
+                {% endif %}
+            {% endfor %} 
+          </td>
+          {% if tutor.total == 1   %}
           <td><a href="{{ url_for('admin.admin_edit_tutor', user_id=user.id) }}">edit</a></td>
+          {% else %}
+          <td><a href="{{ url_for('admin.admin_edit_user', user_id=user.id) }}">edit</a></td>         
+          {% endif %}
+
           <td><a href="{{ url_for('admin.admin_delete_user', user_id=user.id) }}">delete</a></td>
         </tr>
         {% endfor %}

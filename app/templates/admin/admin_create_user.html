@@ -5,16 +5,16 @@
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
     <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
+    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> >
     > Create User
 </li>
 {% endblock %}
 
 
 {% block page_content %}
-
-    <div class="row">
+<div class="row">
         <div class="col-sm-7 col-md-6 col-lg-5 col-centered">
-<h1>Edit User</h1>
+<h1>Create User</h1>
 
 <form action="" method="POST" class="form" role="form">
     {{ form.hidden_tag() }}
