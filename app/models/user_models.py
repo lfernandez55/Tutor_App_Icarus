@@ -52,6 +52,7 @@ class Tutor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     tutor_phone = db.Column(db.String(50)) 
+    display_in_sched = db.Column(db.Boolean, unique=False)
     dates = db.relationship("Time", backref='tutor', cascade='all')
 
 class Time(db.Model):

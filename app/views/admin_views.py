@@ -106,6 +106,7 @@ def admin_create_tutor():
 
         tutor = Tutor()
         tutor.tutor_phone = form.phone.data
+        tutor.display_in_sched = form.display_in_sched.data
         tutor.user_id = user.id
         db.session.add(tutor)
         db.session.commit()
@@ -155,7 +156,7 @@ def admin_edit_tutor(user_id):
         current_roles.append(str(role.id))
 
     form = TutorCustomForm(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, 
-    roles=current_roles, phone=user.tutor.tutor_phone, dates=user.tutor.dates)
+    roles=current_roles, phone=user.tutor.tutor_phone, display_in_sched=user.tutor.display_in_sched, dates=user.tutor.dates)
 
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     rolesCollection = Role.query.all()
@@ -207,7 +208,7 @@ def admin_edit_tutor(user_id):
             user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
 
         user.tutor.tutor_phone = form.phone.data
-
+        user.tutor.display_in_sched = form.display_in_sched.data
         
         # for x, date_group in enumerate(form.dates):
             # print(date_group['time_day'].data, date_group['time_start'].data, date_group['time_end'].data)

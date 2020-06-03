@@ -5,6 +5,7 @@
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
     <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
+    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> >
     > Edit User
 </li>
 {% endblock %}
@@ -25,6 +26,7 @@
             {{render_field(form.roles)}}
             {{render_field(form.phone)}}
             {{render_field(form.remove_time_id)}}
+            {{render_checkbox_field(form.display_in_sched)}}
 
             {% for childform in form.dates %}
                 <fieldset class="form-group">

@@ -1,5 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectMultipleField, SelectField, validators, PasswordField, FieldList, FormField, IntegerField, HiddenField
+from wtforms import StringField, SubmitField, SelectMultipleField, \
+                    SelectField, validators, PasswordField, FieldList, FormField, \
+                    IntegerField, HiddenField, BooleanField
 from wtforms_components import TimeField
 
 class TimeCustomForm(FlaskForm):
@@ -39,7 +41,8 @@ class RoleCustomForm(FlaskForm):
     #     csrf = False
 
 class TutorCustomForm(UserCustomForm):
-    phone = StringField(label='Phonex')
+    phone = StringField(label='PhonexS')
+    display_in_sched = BooleanField(label='Display in Schedule')
     remove_time_id = HiddenField(label="")
     dates = FieldList(FormField(TimeCustomForm), label='dates')
     add_time = SubmitField(label='Add Date')
