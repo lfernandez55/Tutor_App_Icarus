@@ -33,11 +33,11 @@
     			Note 2: Use "auto" instead of "1fr" for a more compact schedule where height of a slot is not proportional to the session length. Implementing a "compact" shortcode attribute might make sense for this!
     			Try 0.5fr for more compact equal rows. I don't quite understand how that works :)
     			*/
-    grid-template-columns: [times] 4em [track-1-start] 1fr [track-1-end track-2-start] 1fr [track-2-end] 10px  
-                                       [ track-3-start] 1fr [track-3-end track-4-start] 1fr [track-4-end] 10px
-                                       [ track-5-start] 1fr [track-5-end track-6-start] 1fr [track-6-end] 10px
-                                       [ track-7-start] 1fr [track-7-end track-8-start] 1fr [track-8-end] 10px
-                                       [ track-9-start] 1fr [track-9-end track-10-start] 1fr [track-10-end]                            
+    grid-template-columns: [times] 4em  [mon-1-start] 1fr [mon-1-end mon-2-start] 1fr [mon-2-end] 10px  
+                                        [tue-1-start] 1fr [tue-1-end tue-2-start] 1fr [tue-2-end] 10px
+                                        [wed-1-start] 1fr [wed-1-end wed-2-start] 1fr [wed-2-end] 10px
+                                        [thu-1-start] 1fr [thu-1-end thu-2-start] 1fr [thu-2-end] 10px
+                                        [fri-1-start] 1fr [fri-1-end fri-2-start] 1fr [fri-2-end] 10px                            
                                        ;
   }
 
