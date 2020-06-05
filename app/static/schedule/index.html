@@ -1,104 +1,161 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>CodePen - Conference Schedule with CSS Grid</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel="stylesheet" href="./style.css">
+	<meta charset="UTF-8">
+	<title>CodePen - Conference Schedule with CSS Grid</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+	<link rel="stylesheet" href="./style.css">
 
 </head>
+
 <body>
-<!-- partial:index.partial.html -->
-	<p>Demo for article <a href="https://css-tricks.com/building-a-conference-schedule-with-css-grid/">"Building a Conference Schedule with CSS Grid"</a> on CSS Tricks.<p>
-	
+	<!-- partial:index.partial.html -->
+	<p>Demo for article <a href="https://css-tricks.com/building-a-conference-schedule-with-css-grid/">"Building a
+			Conference Schedule with CSS Grid"</a> on CSS Tricks.
+	<p>
+
 	<p><i><small>By <a href="https://MRWweb.com">Mark Root-Wiley</a>.</small></i></p>
-	
 
 
-<h2 id="schedule-heading">Conference Schedule</h2>
-<div class="schedule" aria-labelledby="schedule-heading">
-	
-	<span class="track-slot" aria-hidden="true" style="grid-column: track-1-start / track-2-end;; grid-row: tracks;">Mon</span>
-	<span class="track-slot" aria-hidden="true" style="grid-column: track-3-start / track-4-end; grid-row: tracks;">Tue</span>
-	<span class="track-slot" aria-hidden="true" style="grid-column: track-5-start / track-6-end; grid-row: tracks;">Wed</span>
-	<span class="track-slot" aria-hidden="true" style="grid-column: track-7-start / track-8-end; grid-row: tracks;">Thus</span>
-	<span class="track-slot" aria-hidden="true" style="grid-column: track-9-start / track-10-end; grid-row: tracks;">Fri</span>
-	
+
+	<h2 id="schedule-heading">Conference Schedule</h2>
+	<div class="schedule" aria-labelledby="schedule-heading">
+
+		<span class="track-slot" aria-hidden="true"
+			style="grid-column: track-1-start / track-2-end;; grid-row: tracks;">Monday</span>
+		<span class="track-slot" aria-hidden="true"
+			style="grid-column: track-3-start / track-4-end; grid-row: tracks;">Tuesday</span>
+		<span class="track-slot" aria-hidden="true"
+			style="grid-column: track-5-start / track-6-end; grid-row: tracks;">Wednesday</span>
+		<span class="track-slot" aria-hidden="true"
+			style="grid-column: track-7-start / track-8-end; grid-row: tracks;">Thursday</span>
+		<span class="track-slot" aria-hidden="true"
+			style="grid-column: track-9-start / track-10-end; grid-row: tracks;">Friday</span>
 
 
-	<h2 class="time-slot" style="grid-row: time-0800;">8:00am</h2>
-	<h2 class="time-slot" style="grid-row: time-0830;">8:30am</h2>
-	<h2 class="time-slot" style="grid-row: time-0900;">9:00am</h2>
-	<h2 class="time-slot" style="grid-row: time-0930;">9:30am</h2>
-	<h2 class="time-slot" style="grid-row: time-1000;">10:00am</h2>
-	<h2 class="time-slot" style="grid-row: time-1030;">10:30am</h2>
-	<h2 class="time-slot" style="grid-row: time-1100;">11:00am</h2>
-	<h2 class="time-slot" style="grid-row: time-1130;">11:30am</h2>
-	<h2 class="time-slot" style="grid-row: time-1200;">12:00pm</h2>
-	<h2 class="time-slot" style="grid-row: time-1230;">12:30pm</h2>
-	<h2 class="time-slot" style="grid-row: time-1700;">17:00pm</h2>
 
-	<div class="session tutor-1" style="grid-column: track-1-start / track-1-end; grid-row: time-0800 / time-0900;">
-		<h3 class="session-title"><a href="#">Brendan K.</a></h3>
-		<span class="session-time">8:00 - 9:00</span>
+		<h2 class="time-slot" style="grid-row: time-0800;">8:00am</h2>
+		<h2 class="time-slot" style="grid-row: time-0830;">8:30am</h2>
+		<h2 class="time-slot" style="grid-row: time-0900;">9:00am</h2>
+		<h2 class="time-slot" style="grid-row: time-0930;">9:30am</h2>
+		<h2 class="time-slot" style="grid-row: time-1000;">10:00am</h2>
+		<h2 class="time-slot" style="grid-row: time-1030;">10:30am</h2>
+		<h2 class="time-slot" style="grid-row: time-1100;">11:00am</h2>
+		<h2 class="time-slot" style="grid-row: time-1130;">11:30am</h2>
+		<h2 class="time-slot" style="grid-row: time-1200;">12:00pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1230;">12:30pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1200;">12:00pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1230;">12:30pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1300;">1:00pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1330;">1:30pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1400;">2:00pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1430;">2:30pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1500;">3:00pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1530;">3:30pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1600;">4:00pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1630;">4:30pm</h2>
+		<h2 class="time-slot" style="grid-row: time-1700;">5:00pm</h2>
+
+		<section>
+			<h2>Monday</h2>
+
+
+			<div class="session tutor-1"
+				style="grid-column: track-1-start / track-1-end; grid-row: time-0800 / time-0900;">
+				<h3 class="session-lead"><a href="#">Brendan K.</a></h3>
+				<span class="session-time">8:00 - 9:00</span>
+			</div>
+
+			<div class="session tutor-3"
+				style="grid-column: track-2-start / track-2-end; grid-row: time-0800 / time-0845;">
+				<h3 class="session-lead"><a href="#">Joseph H.</a></h3>
+				<span class="session-time">8:00 - 8:45</span>
+			</div>
+
+			<div class="session  tutor-2"
+				style="grid-column: track-1-start / track-2-end; grid-row: time-0900 / time-1000;">
+				<h3 class="session-lead"><a href="#">Luke F.</a></h3>
+				<span class="session-time">9:00 - 10:00</span>
+			</div>
+
+			<div class="session  tutor-4"
+				style="grid-column: track-1-start / track-2-end; grid-row: time-1000 / time-1100;">
+				<h3 class="session-lead"><a href="#">Ron T</a></h3>
+				<span class="session-time">10:00 - 11:00</span>
+			</div>
+
+			<div class="session  tutor-4"
+				style="grid-column: track-1-start / track-2-end; grid-row: time-1500 / time-1715;">
+				<h3 class="session-lead"><a href="#">Ron T</a></h3>
+				<span class="session-time">15:00 - 17:15</span>
+			</div>
+
+		</section>
+
+		<section>
+			<h2>Tuesday</h2>
+
+			<div class="session  tutor-3"
+				style="grid-column: track-3-start / track-3-end; grid-row: time-0800 / time-0830;">
+				<h3 class="session-lead"><a href="#">Joseph H.</a></h3>
+				<span class="session-time">8:00 - 8:30</span>
+			</div>
+
+
+
+			<div class="session tutor-4"
+				style="grid-column: track-4-start / track-4-end; grid-row: time-0800 / time-0830;">
+				<h3 class="session-lead"><a href="#">Ron T.</a></h3>
+				<span class="session-time">8:00 - 8:30</span>
+			</div>
+
+		</section>
+
+		<section>
+			<h2>Wednesday</h2>
+
+		</section>
+
+		<section>
+			<h2>Thursday</h2>
+			<div class="session tutor-2"
+				style="grid-column: track-7-start / track-7-end; grid-row: time-0800 / time-0930;">
+				<h3 class="session-lead"><a href="#">Luke F.</a></h3>
+				<span class="session-time">11:00 - 12:00</span>
+			</div>
+		</section>
+
+		<section>
+			<h2>Friday</h2>
+
+
+			<div class="session tutor-5"
+				style="grid-column: track-9-start / track-10-end; grid-row: time-0800 / time-1000;">
+				<h3 class="session-lead"><a href="#">Sally G.</a></h3>
+				<span class="session-time">8:00 - 10:00</span>
+			</div>
+
+
+			<div class="session tutor-6"
+				style="grid-column: track-9-start / track-10-end; grid-row: time-1230 / time-1400;">
+				<h3 class="session-lead"><a href="#">Suzie Q.</a></h3>
+				<span class="session-time">8:30 - 10:00</span>
+			</div>
+		</section>
+
+
+
+
+
+
+
+
+
+
 	</div>
-	
-	<div class="session tutor-1" style="grid-column: track-2-start / track-2-end; grid-row: time-0800 / time-0845;">
-		<h3 class="session-title"><a href="#">Joseph H.</a></h3>
-		<span class="session-time">8:00 - 8:45</span>
-	</div>
+	<!-- partial -->
 
-	<div class="session  tutor-2" style="grid-column: track-1-start / track-2-end; grid-row: time-0900 / time-1000;">
-		<h3 class="session-title"><a href="#">Luke F.</a></h3>
-		<span class="session-time">9:00 - 10:00</span>
-	</div>
-
-	<div class="session  tutor-4" style="grid-column: track-1-start / track-2-end; grid-row: time-1000 / time-1100;">
-		<h3 class="session-title"><a href="#">Ron T</a></h3>
-		<span class="session-time">10:00 - 11:00</span>
-	</div>
-
-	<div class="session  tutor-4" style="grid-column: track-1-start / track-2-end; grid-row: time-1500 / time-1715;">
-		<h3 class="session-title"><a href="#">Ron T</a></h3>
-		<span class="session-time">15:00 - 17:15</span>
-	</div>
-
-	<div class="session  tutor-3" style="grid-column: track-3-start / track-3-end; grid-row: time-0800 / time-0830;">
-		<h3 class="session-title"><a href="#">Joseph H.</a></h3>
-		<span class="session-time">8:00 - 8:30</span>
-	</div>	
-	
-	<div class="session tutor-4" style="grid-column: track-4-start / track-4-end; grid-row: time-0800 / time-0830;">
-		<h3 class="session-title"><a href="#">Ron T.</a></h3>
-		<span class="session-time">8:00 - 8:30</span>
-	</div>
-	
-	<div class="session tutor-1" style="grid-column: track-9-start / track-10-end; grid-row: time-0800 / time-1000;">
-		<h3 class="session-title"><a href="#">Brendan K.</a></h3>
-		<span class="session-time">8:00 - 10:00</span>
-	</div>
-
-	
-	<div class="session tutor-4" style="grid-column: track-9-start / track-10-end; grid-row: time-1230 / time-1400;">
-		<h3 class="session-title"><a href="#">Ron T.</a></h3>
-		<span class="session-time">8:30 - 10:00</span>
-	</div>
-	
-
-
-	
-
-	
-
-
-	
-	<div class="session tutor-2" style="grid-column: track-7-start / track-7-end; grid-row: time-0800 / time-0930;">
-		<h3 class="session-title"><a href="#">Luke F.</a></h3>
-		<span class="session-time">11:00 - 12:00</span>
-	</div>
-
-</div>
-<!-- partial -->
-  
 </body>
+
 </html>

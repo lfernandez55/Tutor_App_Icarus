@@ -42,10 +42,11 @@
   }
 
 
-  
+
 }
+
 .time-slot {
-  grid-column: times;
+  display: none;
 }
 
 .track-slot {
@@ -53,8 +54,35 @@
   /* hidden on small screens and browsers without grid support */
 }
 
+/* section{
+  background-color: silver;
+  padding: 1em;
+  margin: 1em;
+  border-radius: 2px;
+
+}
+section h2{
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+}  */
+
+
 @supports (display: grid) {
   @media screen and (min-width: 700px) {
+
+    /* section{
+      background-color: white;
+    }
+    section h2{
+      display: none;
+    } */
+
+    .time-slot {
+      display: block;
+      grid-column: times;
+    }
+
     .track-slot {
       display: block;
       padding: 10px 5px 5px;
@@ -99,7 +127,7 @@ body {
   /* box-shadow: rgba(255, 255, 255, 0.6) 1px 1px 0, rgba(0, 0, 0, 0.3) 4px 4px 0; */
 }
 
-.session-title,
+.session-lead,
 .session-time,
 .session-track,
 .session-presenter {
@@ -107,21 +135,21 @@ body {
 
 }
 
-.session-title,
+.session-lead,
 .time-slot {
   margin: 0;
   font-size: 1em;
 }
 
-.session-title a {
+.session-lead a {
   color: #fff;
   -webkit-text-decoration-style: dotted;
           text-decoration-style: dotted;
 }
-.session-title a:hover {
+.session-lead a:hover {
   font-style: italic;
 }
-.session-title a:focus {
+.session-lead a:focus {
   outline: 2px dotted rgba(255, 255, 255, 0.8);
 }
 
@@ -150,6 +178,20 @@ body {
   background-color: #c35500;
   color: #fff;
 }
+
+.tutor-5 {
+  background-color: #7f0068;
+  color: #fff;
+}
+
+.tutor-6{
+  background-color: #695f4d;
+  color: #fff;
+}
+
+
+
+
 
 .track-all {
   display: -webkit-box;
