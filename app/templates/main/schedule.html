@@ -1,0 +1,33 @@
+{% extends "main/main_base.html" %} {# main/main_base.html extends layout.html #}
+
+{% block title %}{{app_name}}{% endblock %}
+
+{% block navbar %}overriding the nav bar...
+{% endblock %}
+{% block body %}
+
+{% block page_content %}
+<h1>Schedule Page</h1>
+
+<button onclick="getSched()">Test request</button>
+<script>
+    function getSched() {
+        var tutorId = 1;
+        var urlVar = '/schedule_json?tutor_id=' + tutorId;
+        var request = new Request(urlVar, {
+            method: 'GET'
+        });
+        fetch(request)
+            .then((response) => {
+                return response.json();
+            })
+            .then((resp) => {
+                alert(resp)
+            })
+            .catch((err) => {
+                alert('Error: ' + err.message);
+            });
+    }
+</script>
+{% endblock %}
+{% endblock %}

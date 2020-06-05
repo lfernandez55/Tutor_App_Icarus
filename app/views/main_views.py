@@ -4,7 +4,7 @@
 
 
 from flask import Blueprint, redirect, render_template, flash
-from flask import request, url_for, current_app
+from flask import request, url_for, current_app, jsonify
 from flask_user import current_user, login_required, roles_required
 
 from app import db
@@ -54,5 +54,22 @@ def user_profile_page():
     return render_template('main/user_profile_page.html',
                            form=form)
 
+# example url: http://127.0.0.1:2000/schedule
+@main_blueprint.route('/schedule')
+def schedule():
+    return render_template('main/schedule.html')
+
+# example url: http://127.0.0.1:2000/schedule_json?tutor=aaaa
+@main_blueprint.route('/schedule_json', methods={'GET'})
+def schedule_core_json():
+    print('in check guess')
+    # minute 807 in https://scotch.io/bar-talk/processing-incoming-request-data-in-flask
+    print('args:', request.args.get('tutor_id')) 
+    # print(request.json) #print out the json object to the console
+    # print(request.json['guess']) #print out the guess to the console
 
 
+
+    hint = {'whitePegs':1, 'blackPegs':2} #create the hint as a dict
+    print("the hint:", hint) #print out the hint to the console
+    return jsonify(hint) #return the dict as a json
