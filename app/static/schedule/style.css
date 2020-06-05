@@ -54,29 +54,19 @@
   /* hidden on small screens and browsers without grid support */
 }
 
-/* section{
-  background-color: silver;
-  padding: 1em;
-  margin: 1em;
-  border-radius: 2px;
-
-}
-section h2{
+.day{
   text-align: center;
   font-size: 2em;
   font-weight: bold;
-}  */
+} 
 
 
 @supports (display: grid) {
   @media screen and (min-width: 700px) {
 
-    /* section{
-      background-color: white;
-    }
-    section h2{
+    .day{
       display: none;
-    } */
+    }
 
     .time-slot {
       display: block;
