@@ -61,4 +61,5 @@ class Time(db.Model):
     time_day = db.Column(db.Integer())
     time_start = db.Column(db.Time())
     time_end = db.Column(db.Time())
+    # tutor = db.relationship('Tutor', uselist=False)
     tutor_id = db.Column(db.Integer(), db.ForeignKey('tutor.id', ondelete='CASCADE'))

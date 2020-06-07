@@ -67,11 +67,16 @@ def schedule_json():
     print('args:', request.args.get('tutor_id')) 
     # print(request.json) #print out the json object to the console
     # print(request.json['guess']) #print out the guess to the console
-
+    
+    foo = Time.query.join(Tutor).filter(Tutor.display_in_sched.is_(True))
+    print('DEBBBBBBBBBBBBBBBB:', foo)
+    for x in foo:
+        print(x)
+    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     dayArray = [1, 2, 3, 4, 5, 6, 7]
     slotArray = []
     for day in dayArray:
-        slots = Time.query.filter(Time.time_day == day)
+        slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True))
         for slot in slots:
             slot.overlap = False
             for otherSlot in slots:
@@ -91,7 +96,9 @@ def schedule_json():
             # te = json.dumps(slot.time_end, indent=4, sort_keys=True, default=str)
             ts = str(slot.time_start)
             te = str(slot.time_end)
-            slotObj = {'day':slot.time_day, 'time_start':ts, 'time_end': te, 'overlap': slot.overlap}
+            slotObj = {'day':slot.time_day, 'time_start':ts, 'time_end': te, 'overlap': slot.overlap, \
+            'display': slot.tutor.display_in_sched, \
+            'tutor_first_name': slot.tutor.users.first_name, 'tutor_last_name': slot.tutor.users.last_name}
 
             # this next line does not work: time_start is not serializable:
             # slotObj = {'day':slot.time_day, 'time_start':slot.time_start, 'time_end': slot.time_end}
