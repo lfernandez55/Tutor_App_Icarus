@@ -65,14 +65,6 @@ def schedule_json():
     print('in check guess')
     # minute 807 in https://scotch.io/bar-talk/processing-incoming-request-data-in-flask
     print('args:', request.args.get('tutor_id')) 
-    # print(request.json) #print out the json object to the console
-    # print(request.json['guess']) #print out the guess to the console
-    
-    foo = Time.query.join(Tutor).filter(Tutor.display_in_sched.is_(True))
-    print('DEBBBBBBBBBBBBBBBB:', foo)
-    for x in foo:
-        print(x)
-    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     dayArray = [1, 2, 3, 4, 5, 6, 7]
     slotArray = []
     for day in dayArray:
@@ -83,32 +75,16 @@ def schedule_json():
                 if slot.id != otherSlot.id:
                     if (slot.time_start <= otherSlot.time_end) and (slot.time_end >= otherSlot.time_start):
                         slot.overlap = True
-            # slotObj = {'day':slot.time_day, 'time_start':slot.time_start, 'time_end': slot.time_end}
-            # slotObj = {'day':slot.time_day}
-            # print('debug', json.dumps(slot, indent=4, sort_keys=True, default=str))
-            # jsonifiedSlot = json.dumps(slot, indent=4, sort_keys=True, default=str)
-            # slotArray.append(jsonifiedSlot)
+            # jsonify chokes on the timestamps so I have to turn them into strings
+            # and build the dict manually below. oddly
+            # i then still have to use jsonify on the list of dicts...otherwise flask complains
             slotObj = {}
-            # slotObj['time_day'] = slot.time_day
-            # slotObj['time_start'] = json.dumps(slot.time_start, indent=4, sort_keys=True, default=str)
-            # slotObj['time_start'] = json.dumps(slot.time_end, indent=4, sort_keys=True, default=str)
-            # ts = json.dumps(slot.time_start, indent=4, sort_keys=True, default=str)
-            # te = json.dumps(slot.time_end, indent=4, sort_keys=True, default=str)
             ts = str(slot.time_start)
             te = str(slot.time_end)
             slotObj = {'day':slot.time_day, 'time_start':ts, 'time_end': te, 'overlap': slot.overlap, \
             'display': slot.tutor.display_in_sched, \
             'tutor_first_name': slot.tutor.users.first_name, 'tutor_last_name': slot.tutor.users.last_name}
 
-            # this next line does not work: time_start is not serializable:
-            # slotObj = {'day':slot.time_day, 'time_start':slot.time_start, 'time_end': slot.time_end}
-
-            print(slotObj)
             slotArray.append(slotObj)
-    # print(slotArray)
-    # jsonifiedObj = json.dumps(slotArray, indent=4, sort_keys=True, default=str)
-    return jsonify(slotArray)
 
-    # hint = { "firstname":"Joe", "age":23} #create the hint as a dict
-    # print("the hint:", hint) #print out the hint to the console
-    # return jsonify(hint) #return the dict as a json
+    return jsonify(slotArray)
