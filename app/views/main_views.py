@@ -65,26 +65,36 @@ def schedule_json():
     print('in check guess')
     # minute 807 in https://scotch.io/bar-talk/processing-incoming-request-data-in-flask
     print('args:', request.args.get('tutor_id')) 
+
     dayArray = [1, 2, 3, 4, 5, 6, 7]
     slotArray = []
     for day in dayArray:
         slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True))
+        # for slot in slots:
+        #     slot.alignment = 'span'
+        #     print('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', slot.alignment)
+        # print('DEBUG1')
+        # for slot in slots:
+        #     print('ZZZZZZZZZZZZZZZZZZZZZ', slot.alignment)
+        # print('DEBUG2')
         for slot in slots:
-            slot.overlap = False
-            for otherSlot in slots:
-                if slot.id != otherSlot.id:
-                    if (slot.time_start <= otherSlot.time_end) and (slot.time_end >= otherSlot.time_start):
-                        slot.overlap = True
-            # jsonify chokes on the timestamps so I have to turn them into strings
-            # and build the dict manually below. oddly
-            # i then still have to use jsonify on the list of dicts...otherwise flask complains
+            # slot.overlap = False
+            # for otherSlot in slots:
+            #     if slot.id != otherSlot.id:
+            #         if (slot.time_start <= otherSlot.time_end) and (slot.time_end >= otherSlot.time_start):
+            #             slot.overlap = True
+            #             print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV")
+            #             # if otherSlot.alignment == 'left':
+            #             #     slot.alignment = 'right'
+            #             # else:
+            #             #     slot.alignment = 'left'
             slotObj = {}
             ts = str(slot.time_start)
             te = str(slot.time_end)
-            slotObj = {'day':slot.time_day, 'time_start':ts, 'time_end': te, 'overlap': slot.overlap, \
+            slotObj = {"id":slot.id, 'day':slot.time_day, 'time_start':ts, 'time_end': te,  \
             'display': slot.tutor.display_in_sched, \
             'tutor_first_name': slot.tutor.users.first_name, 'tutor_last_name': slot.tutor.users.last_name}
 
+            print(slotObj)
             slotArray.append(slotObj)
-
     return jsonify(slotArray)
