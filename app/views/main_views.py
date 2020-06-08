@@ -69,7 +69,7 @@ def schedule_json():
     dayArray = [1, 2, 3, 4, 5, 6, 7]
     slotArray = []
     for day in dayArray:
-        slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True))
+        slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True)).order_by(Time.time_day)
         for slot in slots:
             slotObj = {}
             ts = str(slot.time_start)

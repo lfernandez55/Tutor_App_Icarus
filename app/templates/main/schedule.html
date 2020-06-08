@@ -92,7 +92,38 @@
             });
     }
 
-    
+    // populates the schedule with the times when the tutor teaches
+    function populateSched(slotArray) {
+        calculateSlotAlignment(slotArray);
+
+        var previousDay="-1"
+        for (let x = 0; x < slotArray.length; x++) {
+
+            if (previousDay != slotArray[x].day){
+                var divvy = document.createElement('div');
+                divvy.setAttribute('class', "day");
+                divvy.innerHTML = dayOfWeekLongFormat[slotArray[x].day];
+                document.getElementById('schedArea').appendChild(divvy);
+                previousDay = slotArray[x].day;
+            }
+
+
+            var divVar = document.createElement('div');
+
+            divVar.setAttribute('class', tutorColor(slotArray[x].id));
+            divVar.setAttribute('style', createStyle(slotArray[x]))
+
+            divVar.innerHTML = '<h3 class="session-lead"><a href="#">' + slotArray[x].tutor_first_name + " " +
+                slotArray[x].tutor_first_name.charAt(0) + "." + ' </a></h3><span class="session-time">' + slotArray[x]
+                .time_start.substring(0, 5) + "-" + slotArray[x].time_end.substring(0, 5) + '</span>';
+            document.getElementById('schedArea').appendChild(divVar);
+             
+        }
+
+    }
+
+    // this adds an attribute/value of slot.alignment=span, slot.alignment=left or slot.alignment=right
+    // span is assigned when no other tutors are tutoring at the same time.
     function calculateSlotAlignment(slotArray) {
         var foo = slotArray.filter(addAlignmentAttr);
         for (let x = 0; x < slotArray.length; x++) {
@@ -112,11 +143,10 @@
 
 
             }
-
-
         }
     }
 
+    // turns time into a number by getting rid of the colons
     function parseTime(time) {
         time = parseInt(time.replace(/:/g, ""));
         time = time / 100;
@@ -126,23 +156,6 @@
     function addAlignmentAttr(obj) {
         obj.alignment = 'span';
         return obj;
-    }
-
-    function populateSched(slotArray) {
-        calculateSlotAlignment(slotArray);
-
-        for (let x = 0; x < slotArray.length; x++) {
-            var divVar = document.createElement('div');
-
-            divVar.setAttribute('class', tutorColor(slotArray[x].id));
-            divVar.setAttribute('style', createStyle(slotArray[x]))
-
-            divVar.innerHTML = '<h3 class="session-lead"><a href="#">' + slotArray[x].tutor_first_name + " " +
-                slotArray[x].tutor_first_name.charAt(0) + "." + ' </a></h3><span class="session-time">' + slotArray[x]
-                .time_start.substring(0, 5) + "-" + slotArray[x].time_end.substring(0, 5) + '</span>';
-            document.getElementById('schedArea').appendChild(divVar);
-        }
-
     }
 
     function createStyle(slot) {
@@ -158,6 +171,14 @@
         4: 'thu',
         5: 'fri'
     }
+    var dayOfWeekLongFormat = {
+        1: 'Monday',
+        2: 'Tuesday',
+        3: 'Wednesday',
+        4: 'Thursday',
+        5: 'Friday'
+    }
+    
     var coordLeft = {
         span: "1-start",
         left: "1-start",
