@@ -70,28 +70,11 @@ def schedule_json():
     slotArray = []
     for day in dayArray:
         slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True))
-        # for slot in slots:
-        #     slot.alignment = 'span'
-        #     print('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', slot.alignment)
-        # print('DEBUG1')
-        # for slot in slots:
-        #     print('ZZZZZZZZZZZZZZZZZZZZZ', slot.alignment)
-        # print('DEBUG2')
         for slot in slots:
-            # slot.overlap = False
-            # for otherSlot in slots:
-            #     if slot.id != otherSlot.id:
-            #         if (slot.time_start <= otherSlot.time_end) and (slot.time_end >= otherSlot.time_start):
-            #             slot.overlap = True
-            #             print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV")
-            #             # if otherSlot.alignment == 'left':
-            #             #     slot.alignment = 'right'
-            #             # else:
-            #             #     slot.alignment = 'left'
             slotObj = {}
             ts = str(slot.time_start)
             te = str(slot.time_end)
-            slotObj = {"id":slot.id, 'day':slot.time_day, 'time_start':ts, 'time_end': te,  \
+            slotObj = {"id":slot.tutor.id, 'day':slot.time_day, 'time_start':ts, 'time_end': te,  \
             'display': slot.tutor.display_in_sched, \
             'tutor_first_name': slot.tutor.users.first_name, 'tutor_last_name': slot.tutor.users.last_name}
 
