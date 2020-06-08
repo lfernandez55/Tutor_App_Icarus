@@ -13,9 +13,9 @@
 <script src="/static/js/schedule.js"></script>
 
 <h1>Schedule Page</h1>
-<button onclick="baz()">Baz test</button>
+<button onclick="getSched()">Baz test</button>
 
-<div class="schedule" aria-labelledby="schedule-heading">
+<div class="schedule" aria-labelledby="schedule-heading" id="schedArea">
 
     <span class="track-slot" aria-hidden="true"
         style="grid-column: mon-1-start / mon-2-end;; grid-row: tracks;">Monday</span>
@@ -133,12 +133,12 @@
 
  
 
-        <div class="session tutor-1" style="grid-column:  mon-1-start / mon-2-end;grid-row: time-1130 / time-1330;">
+        <!-- <div class="session tutor-1" style="grid-column:  mon-1-start / mon-2-end;grid-row: time-1130 / time-1330;">
             <h3 class="session-lead"><a href="#">Susan </a></h3><span class="session-time">11:30:00-13:30:00</span>
         </div>
         <div class="session tutor-1" style="grid-column:  wed-1-start / wed-2-end;grid-row: time-0800 / time-0900;">
             <h3 class="session-lead"><a href="#">Susan </a></h3><span class="session-time">08:00:00-09:00:00</span>
-        </div>
+        </div> -->
  
 
 
@@ -225,7 +225,7 @@
 
             divVar.innerHTML = '<h3 class="session-lead"><a href="#">' + slotArray[x].tutor_first_name + ' </a></h3><span class="session-time">' + slotArray[x].time_start  + "-" + slotArray[x].time_end  +  '</span>';
             // alert(divVar)
-            document.getElementById('slots').appendChild(divVar);
+            document.getElementById('schedArea').appendChild(divVar);
         }
 
     }
