@@ -5,6 +5,39 @@
 from flask_user import UserMixin
 from app import db
 
+class Language(db.Model):
+    __tablename__ = 'languages'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    # Define the relationship to Student via StudentLanguages
+    users = db.relationship('User', secondary='user_languages')
+
+
+# Define the UserLanguages association table
+class UserLanguages(db.Model):
+    __tablename__ = 'user_languages'
+    id = db.Column(db.Integer(), primary_key=True)
+    language_id = db.Column(db.Integer(), db.ForeignKey('languages.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
+
+
+
+
+class Course(db.Model):
+    __tablename__ = 'courses'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    # Define the relationship to Student via StudentCourses
+    users = db.relationship('User', secondary='user_courses')
+
+
+# Define the UserCourses association table
+class UserCourses(db.Model):
+    __tablename__ = 'user_courses'
+    id = db.Column(db.Integer(), primary_key=True)
+    course_id = db.Column(db.Integer(), db.ForeignKey('courses.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
+
 
 # Define the User data model. Make sure to add the flask_user.UserMixin !!
 class User(db.Model, UserMixin):

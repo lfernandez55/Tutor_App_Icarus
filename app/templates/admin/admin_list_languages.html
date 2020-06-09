@@ -1,0 +1,46 @@
+{% extends "main/main_base.html" %} {# main/main_base.html extends layout.html #}
+{% block extra_css %}
+<style>
+  form {
+    margin: 10px 0
+  }
+</style>
+{% endblock %}
+{% block title %}{{app_name}}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
+  <a href="{{ url_for('admin.admin_page') }}">Admin Page</a>
+  > List Roles
+</li>
+{% endblock %}
+
+{% block page_content %}
+<h1>List Courses</h1>
+<div class="container">
+  <!-- margin bottom kludge -->
+  <div class="row" style="margin-bottom:10px"> 
+    <div class="col-sm-12 text-right">
+      <a class="btn btn-default btn-primary" href="{{ url_for('admin.admin_create_language') }}">Create Language</a>
+       <br>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table">
+        {% for language in languages  %}
+        <tr>
+          <td>{{language.name}}</td>
+          <td><a href="{{ url_for('admin.admin_edit_language', language_id=language.id) }}">edit</a></td>
+          <td><a href="{{ url_for('admin.admin_delete_language', language_id=language.id) }}">delete</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

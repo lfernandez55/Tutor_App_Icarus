@@ -122,29 +122,6 @@
 
     }
 
-    // this adds an attribute/value of slot.alignment=span, slot.alignment=left or slot.alignment=right
-    // span is assigned when no other tutors are tutoring at the same time.
-    // function calculateSlotAlignment(slotArray) {
-    //     var foo = slotArray.filter(addAlignmentAttr);
-    //     for (let x = 0; x < slotArray.length; x++) {
-    //         for (let y = 0; y < slotArray.length; y++) {
-    //             if (slotArray[x].id != slotArray[y].id) {
-    //                 if (slotArray[x].day == slotArray[y].day) {
-    //                     if ((parseTime(slotArray[x].time_start) < parseTime(slotArray[y].time_end)) && (parseTime(
-    //                             slotArray[x].time_end) > parseTime(slotArray[y].time_start))) {
-    //                         if (slotArray[y].alignment == 'left') {
-    //                             slotArray[x].alignment = 'right';
-    //                         } else {
-    //                             slotArray[x].alignment = 'left';
-    //                         }
-    //                     }
-    //                 }
-    //             }
-
-
-    //         }
-    //     }
-    // }
     function calculateSlotAlignment(slotArray) {
         var foo = slotArray.filter(addAlignmentAttr);
         slotArray.forEach(assignAlignmentValue)
@@ -168,9 +145,6 @@
 
             }
     }
-
-
-
 
     // turns time into a number by getting rid of the colons
     function parseTime(time) {

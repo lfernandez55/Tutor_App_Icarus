@@ -1,0 +1,48 @@
+{% extends "main/main_base.html" %} {# main/main_base.html extends layout.html #}
+{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+{% block title %}{{app_name}}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
+    <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
+    > {{verb}} Course
+</li>
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="row">
+    <div class="col-sm-7 col-md-6 col-lg-5 col-centered">
+        <h1>{{verb}} Course </h1>
+
+        <form action="" method="POST" class="form" role="form">
+            {# for csrf see https://flask-wtf.readthedocs.io/en/stable/csrf.html #}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="form-group">
+                <label for="role_name" class="control-label">Course name:</label>
+                <input class="form-control" name="name" required type="text" value="{{ request.form.name }}">
+                <span style="color:red">{{ error_msg }}</span>
+            </div>
+           
+            <!-- <div class="form-group">
+                <label for="roles" class="control-label">Students:</label>
+                <select multiple class="form-control" name="users" >
+                    {% for user in users %}
+                        {% if user.id|string in course.user_ids %}
+                            <option selected value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</option>
+                        {% else %}
+                            <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }} </option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select>
+            </div> -->
+            <input class="btn btn-default btn-primary" type="submit">
+        </form>
+    </div>
+</div>
+<br />
+
+
+{% endblock %}
