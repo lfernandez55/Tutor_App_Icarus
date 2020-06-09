@@ -16,34 +16,64 @@
 <div class="row">
     <div class="col-sm-7 col-md-6 col-lg-5 col-centered">
         <h1>Create Tutor</h1>
+        <p>aa{{state}}bb</p>
+        <ul class="nav nav-tabs">
+            <li class="active" id="tab1"><a data-toggle="tab" href="#home">Main info</a></li>
+            <li><a data-toggle="tab" href="#menu1" id="tab2">Availability</a></li>
+            <li><a data-toggle="tab" href="#menu2" id="tab3">Courses</a></li>
+          </ul>
+          
 
         <form action="" method="POST" class="form" role="form">
-            {{ form.hidden_tag() }}
-            {{render_field(form.first_name)}}
-            {{render_field(form.last_name)}}
-            {{render_field(form.email)}}
-            {{render_field(form.password)}}
-            {{render_field(form.roles)}}
-            {{render_field(form.phone)}}
-            {{render_checkbox_field(form.display_in_sched)}}
-            
-            {% for childform in form.dates %}
-                <fieldset class="form-group">
-                {% for field in childform %}
-                    {{render_field(field)}}
-                {% endfor %}
-                </fieldset>
-            {% endfor %}     
 
-             
+            <div class="tab-content">
+                <div id="home" class="tab-pane fade in active">
+                  {{ form.hidden_tag() }}
+                  {{render_field(form.first_name)}}
+                  {{render_field(form.last_name)}}
+                  {{render_field(form.email)}}
+                  {{render_field(form.password)}}
+                  {{render_field(form.roles)}}
+                  {{render_field(form.phone)}}
+                  {{render_checkbox_field(form.display_in_sched)}}
+                </div>
+                <div id="menu1" class="tab-pane fade">
+                  {% for childform in form.dates %}
+                  <fieldset class="form-group">
+                  {% for field in childform %}
+                      {{render_field(field)}}
+                  {% endfor %}
+                  </fieldset>
+                  {% endfor %} 
 
-            {{render_submit_field(form.add_time)}}
+                  {{render_submit_field(form.add_time)}}
+                </div>
+                <div id="menu2" class="tab-pane fade">
+                  <h3>Menu 2</h3>
+                  <p>Some content in menu 2.</p>
+                </div>
+              </div>
             {{render_submit_field(form.submit)}}
-
+              <button onclick="document.getElementById('tab2').click()">click it</button>
         </form>
     </div>
 </div>
 <br/>
+<script>
+   {% if state == "add_time" %}
+    alert("foo")
+    //document.getElementById('tab1').classList.remove("active");
+    
+    // document.getElementById('tab2').classList.add("active");
+    
+    // document.getElementById('home').classList.remove("in");
+    // document.getElementById('home').classList.remove("active");
+    
+    // document.getElementById('menu1').classList.add("in");
+    // document.getElementById('menu1').classList.add("active");
+    setTimeout(function(){document.getElementById('tab2').click()},2000);
 
+   {% endif %} 
+</script>
 
 {% endblock %}

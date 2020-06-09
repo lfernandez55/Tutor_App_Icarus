@@ -88,7 +88,7 @@ def admin_create_tutor():
     print(role_choices)
     if form.add_time.data:
         form.dates.append_entry()
-        return render_template('admin/admin_create_tutor.html', form=form)
+        return render_template('admin/admin_create_tutor.html', form=form, state='add_time')
 
     if form.validate_on_submit():
         user = User()
