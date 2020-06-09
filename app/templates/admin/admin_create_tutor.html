@@ -5,8 +5,7 @@
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
     <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
-    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> >
-    > Create Tutor
+    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> > Create Tutor
 </li>
 {% endblock %}
 
@@ -16,7 +15,7 @@
 <div class="row">
     <div class="col-sm-7 col-md-6 col-lg-5 col-centered">
         <h1>Create Tutor</h1>
-        <p>aa{{state}}bb</p>
+
         <ul class="nav nav-tabs">
             <li class="active" id="tab1"><a data-toggle="tab" href="#home">Main info</a></li>
             <li><a data-toggle="tab" href="#menu1" id="tab2">Availability</a></li>
@@ -35,6 +34,7 @@
                   {{render_field(form.password)}}
                   {{render_field(form.roles)}}
                   {{render_field(form.phone)}}
+                  {{render_field(form.remove_time_id)}}
                   {{render_checkbox_field(form.display_in_sched)}}
                 </div>
                 <div id="menu1" class="tab-pane fade">
@@ -43,37 +43,67 @@
                   {% for field in childform %}
                       {{render_field(field)}}
                   {% endfor %}
+                  <a class="remove-time" name="remove_time_link" id="{{loop.index}}">Remove {{loop.index}}</a>
                   </fieldset>
                   {% endfor %} 
-
+                  <br>
                   {{render_submit_field(form.add_time)}}
+                  {{render_submit_field(form.remove_time)}}
                 </div>
                 <div id="menu2" class="tab-pane fade">
                   <h3>Menu 2</h3>
                   <p>Some content in menu 2.</p>
                 </div>
               </div>
+            <br>
             {{render_submit_field(form.submit)}}
-              <button onclick="document.getElementById('tab2').click()">click it</button>
         </form>
     </div>
 </div>
 <br/>
 <script>
+   // this code ensures that we go back to the dates tab when adding or removing times
    {% if state == "add_time" %}
-    alert("foo")
-    //document.getElementById('tab1').classList.remove("active");
-    
-    // document.getElementById('tab2').classList.add("active");
-    
-    // document.getElementById('home').classList.remove("in");
-    // document.getElementById('home').classList.remove("active");
-    
-    // document.getElementById('menu1').classList.add("in");
-    // document.getElementById('menu1').classList.add("active");
-    setTimeout(function(){document.getElementById('tab2').click()},2000);
-
+        window.onload = function()
+        {
+            document.getElementById('tab2').click();
+        };
    {% endif %} 
+
+    // A bug in wtforms means that I can make this next field hidden in admin_forms.py
+    // so i hide it with javascript. see admin_forms.py for more info
+    document.getElementById('remove_time_id').style.display='none';
+    // this next line hides the remove a time button that is added by render_submit_field(form.remove_time) above
+    document.getElementsByName('remove_time')[0].style.display='none'; 
+    // in these next lines we add evenlisteners to the links in each time field group. when clicked these trigger
+    // the hidden remove time button
+    var collection = document.getElementsByName('remove_time_link');
+    for(var x=0; x < collection.length; x++){
+        console.log('DDDDDD')
+        collection[x].addEventListener('click',function(){clickMe(this)})
+    }
+
+    function clickMe(elem){
+        document.getElementById("remove_time_id").value = elem.id;
+        document.getElementsByName("remove_time")[0].click();
+    }
+    
 </script>
+
+
+<style>
+    .remove-time{
+        cursor: pointer;
+    }
+    .tab-pane{
+        background-color: aliceblue;
+    }
+    .active{
+        padding: 2px;
+    }
+    .active, .active a{
+        background-color: aliceblue !important;
+    }
+</style>
 
 {% endblock %}

@@ -5,8 +5,7 @@
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
     <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
-    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> >
-    > Edit User
+    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> > Edit User
 </li>
 {% endblock %}
 
@@ -48,7 +47,13 @@
 </div>
 <br/>
 <script>
-    document.getElementsByName('remove_time')[0].style.display='none'
+    // A bug in wtforms means that I can make this next field hidden in admin_forms.py
+    // so i hide it with javascript. see admin_forms.py for more info
+    document.getElementById('remove_time_id').style.display='none';
+    // this next line hides the remove a time button that is added by render_submit_field(form.remove_time) above
+    document.getElementsByName('remove_time')[0].style.display='none'; 
+    // in these next lines we add evenlisteners to the links in each time field group. when clicked these trigger
+    // the hidden remove time button
     var collection = document.getElementsByName('remove_time_link');
     for(var x=0; x < collection.length; x++){
         console.log('DDDDDD')

@@ -43,7 +43,10 @@ class RoleCustomForm(FlaskForm):
 class TutorCustomForm(UserCustomForm):
     phone = StringField(label='PhonexS')
     display_in_sched = BooleanField(label='Display in Schedule')
-    remove_time_id = HiddenField(label="")
+    # ideally the next field should be remove_time_id = HiddenField(label="") 
+    # however in the template, the line {{ form.hidden_tag() }} renders this field multiple times
+    # it looks like a bug in wtforms that happens when child forms are used. we resolve it by hiding the field using javascript in the form
+    remove_time_id = StringField(label="")
     dates = FieldList(FormField(TimeCustomForm), label='dates')
     add_time = SubmitField(label='Add Date')
     remove_time = SubmitField(label='Remove Date')

@@ -90,6 +90,33 @@ def admin_create_tutor():
         form.dates.append_entry()
         return render_template('admin/admin_create_tutor.html', form=form, state='add_time')
 
+    if form.remove_time.data:
+        print("DDDDDDDD", form.remove_time_id.data)
+        print("xxxxxxx", type(form.dates), len(form.dates))
+
+        # since we are popping off items from the end of the list rather than the beginning the index of the item to remove is:
+        index_of_item_to_remove = len(form.dates) - int(form.remove_time_id.data)
+
+        # pop off all the items in the fieldlist, and append them to the reverselist with the exception of the item to remove
+        reversed_list = []
+        number_of_dates = len(form.dates)
+        for x in range(number_of_dates ):
+            if index_of_item_to_remove == x:
+                popped_entry = form.dates.pop_entry()
+            else:
+                reversed_list.append(form.dates.pop_entry())
+
+        # reverse the reversedlist and repopulate form.dates
+        form.dates = list(reversed(reversed_list))
+        print("popped_entry.data['id']", popped_entry.data['id'])
+        if popped_entry.data['id']:
+                child = Time.query.filter(Time.id == popped_entry.data['id']).first()
+                db.session.delete(child)
+                db.session.commit()
+
+        return render_template('admin/admin_create_tutor.html', form=form, state='add_time')
+
+
     if form.validate_on_submit():
         user = User()
         user.first_name  = form.first_name.data
