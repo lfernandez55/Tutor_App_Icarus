@@ -39,11 +39,6 @@ def admin_create_user():
     role_choices = list(enumerate(role_list,start=1))
     form.roles.choices = role_choices
 
-    # if form.add_child.data:
-    #     # tutor_form = TutorCustomForm()
-    #     form.children.append_entry()
-    #     return render_template('admin/admin_create_user.html', form=form)
-
     if form.validate_on_submit():
         user = User()
         user.first_name  = form.first_name.data
@@ -57,12 +52,6 @@ def admin_create_user():
         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-
-        # tutor = Tutor()
-        # tutor.tutor_phone = form.tutor.data['phone']
-        # tutor.user_id = user.id
-        # db.session.add(tutor)
-        # db.session.commit()
 
         flash('User Created!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
@@ -160,22 +149,6 @@ def admin_edit_tutor(user_id):
     
     print("XXXXXXXXXXXXXXXXXXXXX:")
     print(user.first_name)
-    # the user.tutor doesn't have to be iterated through becuz in the model we defined it the backref as uselist='false'
-    # print(user.tutor.tutor_phone)
-    # print(user.tutor.dates)
-
-    # need the below for admin and member accounts that don't be default have tutor info
-    # if user.tutor is None:
-    #     phone_var = ""
-    #     dates_var = ""
-    # else:
-    #     phone_var = user.tutor.tutor_phone
-    #     dates_var = user.tutor.dates
-    #     # tutor = Tutor()
-    #     # tutor.tutor_phone = "1-111-111-1111"
-    #     # tutor.user_id = user.id
-    #     # db.session.add(tutor)
-    #     # db.session.commit()
 
     # determining the default options to be selected (notice how they are loaded when the form is instantiated)
     current_roles = []
@@ -237,21 +210,6 @@ def admin_edit_tutor(user_id):
         user.tutor.tutor_phone = form.phone.data
         user.tutor.display_in_sched = form.display_in_sched.data
         
-        # for x, date_group in enumerate(form.dates):
-            # print(date_group['time_day'].data, date_group['time_start'].data, date_group['time_end'].data)
-            # if x < len(user.tutor.dates):
-            #     user.tutor.dates[x].time_day = date_group['time_day'].data
-            #     user.tutor.dates[x].time_start = date_group['time_start'].data
-            #     user.tutor.dates[x].time_end = date_group['time_end'].data
-            # else:
-            #     time = Time()
-            #     time.time_day = date_group['time_day'].data
-            #     time.time_start = date_group['time_start'].data
-            #     time.time_end = date_group['time_end'].data
-            #     time.tutor_id = user.tutor.id
-            #     db.session.add(time)
-            #     db.session.commit()
-        # commented out code above is alternative way of doing below:
         for date_group in form.dates:
             if date_group['id'].data != "":
                time = Time.query.filter(Time.id == date_group['id'].data).first()
