@@ -19,7 +19,7 @@
         <ul class="nav nav-tabs">
             <li class="active" id="tab1"><a data-toggle="tab" href="#home">Main info</a></li>
             <li><a data-toggle="tab" href="#menu1" id="tab2">Availability</a></li>
-            <li><a data-toggle="tab" href="#menu2" id="tab3">Courses</a></li>
+            <li><a data-toggle="tab" href="#menu2" id="tab3">Languages</a></li>
           </ul>
           
 
@@ -36,23 +36,26 @@
                   {{render_field(form.phone)}}
                   {{render_field(form.remove_time_id)}}
                   {{render_checkbox_field(form.display_in_sched)}}
+
                 </div>
                 <div id="menu1" class="tab-pane fade">
-                  {% for childform in form.dates %}
-                  <fieldset class="form-group">
-                  {% for field in childform %}
-                      {{render_field(field)}}
-                  {% endfor %}
-                  <a class="remove-time" name="remove_time_link" id="{{loop.index}}">Remove {{loop.index}}</a>
-                  </fieldset>
-                  {% endfor %} 
-                  <br>
-                  {{render_submit_field(form.add_time)}}
-                  {{render_submit_field(form.remove_time)}}
+                    {% for childform in form.dates %}
+                        <fieldset class="form-group">
+                            {% for field in childform %}
+                                {{render_field(field)}}
+                            {% endfor %}
+                            <a class="remove-time" name="remove_time_link" id="{{loop.index}}">Remove {{loop.index}}</a>
+                        </fieldset>
+                    {% endfor %} 
+                    <br>
+                    {{render_submit_field(form.add_time)}}
+                    {{render_submit_field(form.remove_time)}}
                 </div>
                 <div id="menu2" class="tab-pane fade">
-                  <h3>Menu 2</h3>
-                  <p>Some content in menu 2.</p>
+                    <div>TODO: Persist this data in view...</div>
+                    {% for field in form.language %}
+                        <div>{{ field }} {{field.label}}</div>
+                    {% endfor %} 
                 </div>
               </div>
             <br>

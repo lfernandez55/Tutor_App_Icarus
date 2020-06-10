@@ -3,6 +3,8 @@ from wtforms import StringField, SubmitField, SelectMultipleField, \
                     SelectField, validators, PasswordField, FieldList, FormField, \
                     IntegerField, HiddenField, BooleanField
 from wtforms_components import TimeField
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, widgets
+from app.models.user_models import Language
 
 class TimeCustomForm(FlaskForm):
     id = HiddenField(label="")
@@ -43,6 +45,13 @@ class RoleCustomForm(FlaskForm):
 class TutorCustomForm(UserCustomForm):
     phone = StringField(label='PhonexS')
     display_in_sched = BooleanField(label='Display in Schedule')
+    # for the below attribute see: https://stackoverflow.com/questions/48845098/how-to-make-a-list-of-booleanfield-using-wtforms
+    language = QuerySelectMultipleField(
+        query_factory=lambda: Language.query.all(),
+        get_label='name',
+        widget=widgets.ListWidget(prefix_label=False),
+        option_widget=widgets.CheckboxInput()
+    )
     # ideally the next field should be remove_time_id = HiddenField(label="") 
     # however in the template, the line {{ form.hidden_tag() }} renders this field multiple times
     # it looks like a bug in wtforms that happens when child forms are used. we resolve it by hiding the field using javascript in the form
