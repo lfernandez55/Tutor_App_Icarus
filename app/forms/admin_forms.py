@@ -46,7 +46,7 @@ class TutorCustomForm(UserCustomForm):
     phone = StringField(label='PhonexS')
     display_in_sched = BooleanField(label='Display in Schedule')
     # for the below attribute see: https://stackoverflow.com/questions/48845098/how-to-make-a-list-of-booleanfield-using-wtforms
-    language = QuerySelectMultipleField(
+    languages = QuerySelectMultipleField(
         query_factory=lambda: Language.query.all(),
         get_label='name',
         widget=widgets.ListWidget(prefix_label=False),

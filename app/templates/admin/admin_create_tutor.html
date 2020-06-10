@@ -56,7 +56,7 @@
                 </div>
                 <div id="menu2" class="tab-pane fade">
                     <div>TODO: Persist this data in view...</div>
-                    {% for field in form.language %}
+                    {% for field in form.languages %}
                         <div>{{ field }} {{field.label}}</div>
                     {% endfor %} 
                 </div>
@@ -76,8 +76,8 @@
         };
    {% endif %} 
 
-    // A bug in wtforms means that I can make this next field hidden in admin_forms.py
-    // so i hide it with javascript. see admin_forms.py for more info
+    // A bug in wtforms hidden method will duplicate this element many times in the form.  So I don't make it hidden in wtforms.
+    // Instead i hide it with javascript. see admin_forms.py for more info
     document.getElementById('remove_time_id').style.display='none';
     // this next line hides the remove a time button that is added by render_submit_field(form.remove_time) above
     document.getElementsByName('remove_time')[0].style.display='none'; 

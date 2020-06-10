@@ -116,6 +116,14 @@ def admin_create_tutor():
             roleObj = Role.query.filter(Role.id == role_id).first()
             user.roles.append(roleObj)
         # todo: add in some password validations
+
+        user.languages = []
+        for lang in form.languages.data:
+            print('dir(lang) dumps the attributes in the object: ', dir(lang) )
+            print('lang.__dict__ dumps the attributes and values: :', lang.__dict__)
+            langObj = Language.query.filter(Language.id == lang.id).first()
+            user.languages.append(langObj)
+
         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -136,6 +144,7 @@ def admin_create_tutor():
             time.tutor_id = tutor.id
             db.session.add(time)
             db.session.commit()
+
 
 
         flash('User Created!!', 'success')
