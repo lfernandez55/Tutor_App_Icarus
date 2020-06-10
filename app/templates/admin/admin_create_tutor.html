@@ -1,5 +1,8 @@
 {% extends "main/main_base.html" %} {# main/main_base.html extends layout.html #}
-{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+{#  Overriding flask user macros because we need to put an id in the submit field....
+    {% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+#}
+{% from "common/form_macros.html" import render_field, render_checkbox_field, render_submit_field %}
 {% block title %}{{app_name}}{% endblock %}
 
 {% block breadcrumb %}
@@ -17,9 +20,9 @@
         <h1>Create Tutor</h1>
 
         <ul class="nav nav-tabs">
-            <li class="active" id="tab1"><a data-toggle="tab" href="#home">Main info</a></li>
-            <li><a data-toggle="tab" href="#menu1" id="tab2">Availability</a></li>
-            <li><a data-toggle="tab" href="#menu2" id="tab3">Languages</a></li>
+            <li class="active" ><a data-toggle="tab" href="#home" id="tab1">Main info</a></li>
+            <li><a data-toggle="tab" href="#menu1" id="tab2" onclick="validate()">Availability</a></li>
+            <li><a data-toggle="tab" href="#menu2" id="tab3" onclick="validate()">Languages</a></li>
           </ul>
           
 
@@ -91,6 +94,16 @@
         document.getElementsByName("remove_time")[0].click();
     }
     
+    function validate(){
+        // todo: add more robust email validation
+        if( document.getElementById('first_name').value == "" || document.getElementById('last_name').value == "" 
+        || document.getElementById('email').value == ""){
+            // go back to tab 1
+            setTimeout(function(){document.getElementById('tab1').click();},100)
+            // submit the form again to make the validation messages appear -- timeouts are needed here
+            setTimeout(function(){document.getElementById('submit').click();},500)
+        }
+    }
 </script>
 
 
