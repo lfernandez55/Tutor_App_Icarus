@@ -42,16 +42,37 @@ class RoleCustomForm(FlaskForm):
     #     # No need for csrf token in this child form
     #     csrf = False
 
+# class TutorCustomForm(UserCustomForm):
+#     phone = StringField(label='PhonexS')
+#     display_in_sched = BooleanField(label='Display in Schedule')
+#     # for the below attribute see: https://stackoverflow.com/questions/48845098/how-to-make-a-list-of-booleanfield-using-wtforms
+#     languages = QuerySelectMultipleField(
+#         query_factory=lambda: Language.query.all(),
+#         get_label='name',
+#         widget=widgets.ListWidget(prefix_label=False),
+#         option_widget=widgets.CheckboxInput()
+#     )
+#     # ideally the next field should be remove_time_id = HiddenField(label="") 
+#     # however in the template, the line {{ form.hidden_tag() }} renders this field multiple times
+#     # it looks like a bug in wtforms that happens when child forms are used. we resolve it by hiding the field using javascript in the form
+#     remove_time_id = StringField(label="")
+#     dates = FieldList(FormField(TimeCustomForm), label='dates')
+#     add_time = SubmitField(label='Add Date')
+#     remove_time = SubmitField(label='Remove Date')
+    
+
+# the multicheckbox example comes from https://gist.github.com/doobeh/4668212
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+    def pre_validate(self, form):
+        """per_validation is disabled"""
+
 class TutorCustomForm(UserCustomForm):
-    phone = StringField(label='PhonexS')
+    phone = StringField(label='Phone')
     display_in_sched = BooleanField(label='Display in Schedule')
-    # for the below attribute see: https://stackoverflow.com/questions/48845098/how-to-make-a-list-of-booleanfield-using-wtforms
-    languages = QuerySelectMultipleField(
-        query_factory=lambda: Language.query.all(),
-        get_label='name',
-        widget=widgets.ListWidget(prefix_label=False),
-        option_widget=widgets.CheckboxInput()
-    )
+    # for the below attribute see: from https://gist.github.com/doobeh/4668212
+    languages = MultiCheckboxField('Label')
     # ideally the next field should be remove_time_id = HiddenField(label="") 
     # however in the template, the line {{ form.hidden_tag() }} renders this field multiple times
     # it looks like a bug in wtforms that happens when child forms are used. we resolve it by hiding the field using javascript in the form
@@ -59,4 +80,3 @@ class TutorCustomForm(UserCustomForm):
     dates = FieldList(FormField(TimeCustomForm), label='dates')
     add_time = SubmitField(label='Add Date')
     remove_time = SubmitField(label='Remove Date')
-    

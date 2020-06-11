@@ -74,6 +74,13 @@ def admin_create_tutor():
     role_choices = list(enumerate(role_list,start=1))
     form.roles.choices = role_choices
 
+    langCollection = Language.query.all()
+    lang_list = []
+    for lang in langCollection:
+        lang_list.append(lang.name)
+    lang_choices = list(enumerate(lang_list,start=1))
+    form.languages.choices = lang_choices
+
     print(role_choices)
     if form.add_time.data:
         form.dates.append_entry()
@@ -118,11 +125,13 @@ def admin_create_tutor():
         # todo: add in some password validations
 
         user.languages = []
-        for lang in form.languages.data:
-            print('dir(lang) dumps the attributes in the object: ', dir(lang) )
-            print('lang.__dict__ dumps the attributes and values: :', lang.__dict__)
-            langObj = Language.query.filter(Language.id == lang.id).first()
-            user.languages.append(langObj)
+        for lang in form.languages:
+            # print('dir(lang) dumps the attributes in the object: ', dir(lang) )
+            # print("          ")
+            # print('lang.__dict__ dumps the attributes and values: :', lang.__dict__)
+            if lang.checked is True:
+                langObj = Language.query.filter(Language.id == lang.data).first()
+                user.languages.append(langObj)
 
         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
         db.session.add(user)
@@ -162,10 +171,16 @@ def admin_edit_tutor(user_id):
     # determining the default options to be selected (notice how they are loaded when the form is instantiated)
     current_roles = []
     for role in user.roles:
+        print('QQQQQQQQ')
         current_roles.append(str(role.id))
 
+    current_languages = []
+    for lang in user.languages:
+        # current_languages.append(str(lang.id))
+        current_languages.append(lang.id)
+
     form = TutorCustomForm(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, 
-    roles=current_roles, phone=user.tutor.tutor_phone, display_in_sched=user.tutor.display_in_sched, dates=user.tutor.dates)
+    roles=current_roles, languages=current_languages, phone=user.tutor.tutor_phone, display_in_sched=user.tutor.display_in_sched, dates=user.tutor.dates)
 
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     rolesCollection = Role.query.all()
@@ -174,6 +189,16 @@ def admin_edit_tutor(user_id):
         role_list.append(role.name)
     role_choices = list(enumerate(role_list,start=1))
     form.roles.choices = role_choices
+
+    langCollection = Language.query.all()
+    lang_list = []
+    for lang in langCollection:
+        lang_list.append(lang.name)
+    lang_choices = list(enumerate(lang_list,start=1))
+    form.languages.choices = lang_choices
+
+
+    # instead of doing languages like roles I added the list of languages in the form. see admin_forms > languages
 
     if form.add_time.data:
         form.dates.append_entry()
@@ -213,6 +238,16 @@ def admin_edit_tutor(user_id):
         for role_id in form.roles.data:
             roleObj = Role.query.filter(Role.id == role_id).first()
             user.roles.append(roleObj)
+
+        user.languages = []
+        for lang in form.languages:
+            # print('dir(lang) dumps the attributes in the object: ', dir(lang) )
+            # print("          ")
+            # print('lang.__dict__ dumps the attributes and values: :', lang.__dict__)
+            if lang.checked is True:
+                langObj = Language.query.filter(Language.id == lang.data).first()
+                user.languages.append(langObj)
+
         if form.password.data != "":
             user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
 
