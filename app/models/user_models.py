@@ -22,8 +22,6 @@ class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(50), unique=True)
-    # Define the relationship to Student via StudentCourses
-    users = db.relationship('User', secondary='users_courses')
 
 
 # Define the UserCourses association table
@@ -56,7 +54,10 @@ class User(db.Model, UserMixin):
                             backref=db.backref('users', lazy='dynamic'))
 
     languages = db.relationship('Language', secondary='users_languages',
-                    backref=db.backref('users', lazy='dynamic'))                     
+                    backref=db.backref('users', lazy='dynamic'))   
+
+    courses = db.relationship('Course', secondary='users_courses',
+                backref=db.backref('users', lazy='dynamic'))                                     
     # tutor = db.relationship("Tutor", uselist=False, back_populates="users")
     # tutor = db.relationship("Tutor", backref='users', cascade='all')
     # see https://stackoverflow.com/questions/7671886/attributeerror-instrumentedlist-object-has-no-attribute

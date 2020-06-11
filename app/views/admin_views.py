@@ -81,6 +81,13 @@ def admin_create_tutor():
     lang_choices = list(enumerate(lang_list,start=1))
     form.languages.choices = lang_choices
 
+    courseCollection = Course.query.all()
+    course_list = []
+    for course in courseCollection:
+        course_list.append(course.name)
+    course_choices = list(enumerate(course_list,start=1))
+    form.courses.choices = course_choices
+
     print(role_choices)
     if form.add_time.data:
         form.dates.append_entry()
@@ -133,6 +140,12 @@ def admin_create_tutor():
                 langObj = Language.query.filter(Language.id == lang.data).first()
                 user.languages.append(langObj)
 
+        user.courses = []
+        for course in form.courses:
+            if course.checked is True:
+                courseObj = Course.query.filter(Course.id == course.data).first()
+                user.courses.append(courseObj)
+
         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -179,8 +192,13 @@ def admin_edit_tutor(user_id):
         # current_languages.append(str(lang.id))
         current_languages.append(lang.id)
 
+    current_courses = []
+    for course in user.courses:
+        current_courses.append(course.id)
+
+
     form = TutorCustomForm(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, 
-    roles=current_roles, languages=current_languages, phone=user.tutor.tutor_phone, display_in_sched=user.tutor.display_in_sched, dates=user.tutor.dates)
+    roles=current_roles, languages=current_languages, courses=current_courses, phone=user.tutor.tutor_phone, display_in_sched=user.tutor.display_in_sched, dates=user.tutor.dates)
 
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     rolesCollection = Role.query.all()
@@ -196,6 +214,13 @@ def admin_edit_tutor(user_id):
         lang_list.append(lang.name)
     lang_choices = list(enumerate(lang_list,start=1))
     form.languages.choices = lang_choices
+
+    courseCollection = Course.query.all()
+    course_list = []
+    for course in courseCollection:
+        course_list.append(course.name)
+    course_choices = list(enumerate(course_list,start=1))
+    form.courses.choices = course_choices
 
 
     # instead of doing languages like roles I added the list of languages in the form. see admin_forms > languages
@@ -247,6 +272,12 @@ def admin_edit_tutor(user_id):
             if lang.checked is True:
                 langObj = Language.query.filter(Language.id == lang.data).first()
                 user.languages.append(langObj)
+
+        user.courses = []
+        for course in form.courses:
+            if course.checked is True:
+                courseObj = Course.query.filter(Course.id == course.data).first()
+                user.courses.append(courseObj)
 
         if form.password.data != "":
             user.password=current_app.user_manager.password_manager.hash_password(form.password.data)

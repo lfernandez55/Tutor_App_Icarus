@@ -65,6 +65,7 @@ class RoleCustomForm(FlaskForm):
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
+    # for next line see: https://stackoverflow.com/questions/39395125/wtforms-selectmultiplefield-disable-validation
     def pre_validate(self, form):
         """per_validation is disabled"""
 
@@ -73,6 +74,7 @@ class TutorCustomForm(UserCustomForm):
     display_in_sched = BooleanField(label='Display in Schedule')
     # for the below attribute see: from https://gist.github.com/doobeh/4668212
     languages = MultiCheckboxField('Label')
+    courses = MultiCheckboxField('Label')
     # ideally the next field should be remove_time_id = HiddenField(label="") 
     # however in the template, the line {{ form.hidden_tag() }} renders this field multiple times
     # it looks like a bug in wtforms that happens when child forms are used. we resolve it by hiding the field using javascript in the form
