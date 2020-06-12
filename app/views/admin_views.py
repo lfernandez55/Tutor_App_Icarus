@@ -181,7 +181,7 @@ def admin_edit_tutor(user_id):
     print("XXXXXXXXXXXXXXXXXXXXX:")
     print(user.first_name)
 
-    # determining the default options to be selected (notice how they are loaded when the form is instantiated)
+    # determining the options that the user has selected/checked
     current_roles = []
     for role in user.roles:
         print('QQQQQQQQ')
@@ -201,6 +201,9 @@ def admin_edit_tutor(user_id):
     roles=current_roles, languages=current_languages, courses=current_courses, phone=user.tutor.tutor_phone, display_in_sched=user.tutor.display_in_sched, dates=user.tutor.dates)
 
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
+    # the above is a subset of the below
+    # the above is the checked boxes, the below is all the check boxes
+    # the above is the selected items, the below is all the items that can be selected
     rolesCollection = Role.query.all()
     role_list = []
     for role in rolesCollection:
@@ -221,6 +224,11 @@ def admin_edit_tutor(user_id):
         course_list.append(course.name)
     course_choices = list(enumerate(course_list,start=1))
     form.courses.choices = course_choices
+    # the below print dictionary statement outputs what is built, namely:
+    #   choices attribute: 'choices': [(1, 'Web 1400'), (2, 'CS 1000'), (3, 'Web 1430'), (4, 'Web 3200')]
+    #   data attribute: 'data': ['2', '3', '4']
+    # print("SHOW:", form.courses.__dict__)
+
 
 
     # instead of doing languages like roles I added the list of languages in the form. see admin_forms > languages
