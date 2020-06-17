@@ -369,22 +369,6 @@ def admin_delete_user(user_id):
     flash('User Deleted!!', 'success')
     return redirect(url_for('admin.admin_list_users'))
 
-@admin_blueprint.route('/admin/create_role', methods=['GET', 'POST'])
-@roles_required('admin')  
-def admin_create_role():
-    form = RoleCustomForm()
-
-    if form.validate_on_submit():
-        role = Role()
-        role.name  = form.name.data
-        # role.label = form.label.data
-        db.session.add(role)
-        db.session.commit()
-        flash('Role Created!!', 'success')
-        return redirect(url_for('admin.admin_list_roles'))
-    return render_template('admin/admin_create_role.html', form=form)
-
-
 @admin_blueprint.route('/admin/list_roles', methods=['GET', 'POST'] )
 @roles_required('admin')  
 def admin_list_roles():
@@ -393,18 +377,19 @@ def admin_list_roles():
         print(role.name)
     return render_template('admin/admin_list_roles.html', roles=roles) 
 
-
-
-@admin_blueprint.route('/admin/delete_role/<role_id>')
+@admin_blueprint.route('/admin/create_role', methods=['GET', 'POST'])
 @roles_required('admin')  
-def admin_delete_role(role_id):
-    role = Role.query.filter(Role.id == role_id).first()
-    db.session.delete(role)
-    db.session.commit()
-    flash('Role Deleted!!', 'success')
-    return redirect(url_for('admin.admin_list_roles'))
+def admin_create_role():
+    form = RoleCustomForm()
 
-
+    if form.validate_on_submit():
+        role = Role()
+        role.name  = form.name.data
+        db.session.add(role)
+        db.session.commit()
+        flash('Role Created!!', 'success')
+        return redirect(url_for('admin.admin_list_roles'))
+    return render_template('admin/admin_create_edit_role.html', form=form, state='create')
 
 @admin_blueprint.route('/admin/edit_role/<role_id>', methods=['GET', 'POST'] )
 @roles_required('admin')  
@@ -419,7 +404,20 @@ def admin_edit_role(role_id):
         db.session.commit()
         flash('Role Updated!!', 'success')
         return redirect(url_for('admin.admin_list_roles'))
-    return render_template('admin/admin_edit_role.html', form=form)
+    return render_template('admin/admin_create_edit_role.html', form=form, state='edit')
+
+@admin_blueprint.route('/admin/delete_role/<role_id>')
+@roles_required('admin')  
+def admin_delete_role(role_id):
+    role = Role.query.filter(Role.id == role_id).first()
+    db.session.delete(role)
+    db.session.commit()
+    flash('Role Deleted!!', 'success')
+    return redirect(url_for('admin.admin_list_roles'))
+
+
+
+
 
 
 ####################################################################################

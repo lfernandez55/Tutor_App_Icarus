@@ -78,8 +78,17 @@
         window.onload = function()
         {
             document.getElementById('tab2').click();
+            document.getElementById('roles').onchange = checkRole;
+        };
+   {% else %} 
+        {
+            alert('ddddddbbb')
+            // document.getElementById('roles').addEventListener("onchange", checkRole);
+            document.getElementById('roles').onchange = checkRole;
         };
    {% endif %} 
+
+
 
     // A bug in wtforms hidden method will duplicate this element many times in the form.  So I don't make it hidden in wtforms.
     // Instead i hide it with javascript. see admin_forms.py for more info
@@ -108,6 +117,45 @@
             // submit the form again to make the validation messages appear -- timeouts are needed here
             setTimeout(function(){document.getElementById('submit').click();},500)
         }
+    }
+
+    function checkRole(){
+        rolesSelected = getSelectValues(document.getElementById('roles'));
+        alert(rolesSelected)
+        if (rolesSelected.includes("Tutor") == true){
+            // reveal the tabs
+            alert("tutor is selected")
+            document.getElementById('tab2').style.display="block";
+            document.getElementById('tab3').style.display="block";
+            document.getElementById('tab4').style.display="block";
+            document.getElementById('menu1').style.display="block";
+            document.getElementById('menu2').style.display="block";
+            document.getElementById('menu3').style.display="block";
+        }else{
+            // hide the tabs
+            document.getElementById('tab2').style.display="none";
+            document.getElementById('tab3').style.display="none";
+            document.getElementById('tab4').style.display="none";
+            document.getElementById('menu1').style.display="none";
+            document.getElementById('menu2').style.display="none";
+            document.getElementById('menu3').style.display="none";
+        }
+    }
+
+    function getSelectValues(select) {
+    var result = [];
+    var options = select && select.options;
+    var opt;
+
+    for (var i=0, iLen=options.length; i<iLen; i++) {
+        opt = options[i];
+
+        if (opt.selected) {
+            // result.push(opt.value || opt.text);
+            result.push(opt.text);
+        }
+    }
+    return result;
     }
 </script>
 
