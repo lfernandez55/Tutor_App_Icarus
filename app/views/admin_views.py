@@ -30,10 +30,8 @@ def admin_list_users():
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_create_tutor():
     form = TutorCustomForm()
-    # form.first_name.data = "luke"
-    # form.last_name.data = "fern"   
-    # form.email.data="fern@weber.edu"
-    # form.phone.data="8015409771"
+    # this next line needed for a validation in the user model class
+    form.id=-1
 
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     rolesCollection = Role.query.all()
@@ -168,7 +166,10 @@ def admin_edit_tutor(user_id):
     else:
         form = TutorCustomForm(id=user.id, first_name=user.first_name, last_name=user.last_name, email=user.email, 
         roles=current_roles, languages=current_languages, courses=current_courses, phone=user.tutor.tutor_phone, display_in_sched=user.tutor.display_in_sched, dates=user.tutor.dates)
-            
+
+    # this next line needed for a validation in the model user, see user_models.py.  i don't know why it's not 
+    # instantiated above
+    form.id = user.id            
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     # the above is a subset of the below
     # the above is the checked boxes, the below is all the check boxes

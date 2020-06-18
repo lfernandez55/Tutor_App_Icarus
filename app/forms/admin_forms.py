@@ -34,20 +34,13 @@ class UserCustomForm(FlaskForm):
     submit = SubmitField('Save')
 
     def validate_email(form, field):
-        print("DDDDDDDDDDDDDDDDDDDDDDDD:", form, field)
         if field.raw_data == "":
             raise ValidationError('Email cannot be blank')
         else:
-            result = User.query.filter_by(email=field.data).first()
+            result = User.query.filter(User.email == field.data).filter(User.id != form.id).first()
             if result:
                 raise ValidationError('Email must be unique')
             
-        # if not field.raw_data:
-        #     result = User.query.filter_by(email=form.field.data).first()
-        #     if result:
-        #         raise ValidationError('Email must be unique')
-        # raise ValidationError('Email cannot be blank')
-
 class RoleCustomForm(FlaskForm):
     name = StringField('Role name', validators=[
         validators.DataRequired('Role name is required')])
