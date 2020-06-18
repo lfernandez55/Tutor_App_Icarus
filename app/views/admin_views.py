@@ -244,7 +244,7 @@ def admin_edit_tutor(user_id):
                 courseObj = Course.query.filter(Course.id == course.data).first()
                 user.courses.append(courseObj)
 
-        if form.password.data.length > 0:
+        if form.password.data != "not_updated_flag":
             user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
 
         # kludge:  to accomodate the original admin and manager accounts that hadn't been assigned any tutor attributes
@@ -273,6 +273,7 @@ def admin_edit_tutor(user_id):
 
         flash('User Updated!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
+    print("form.password:", form.first_name)
     return render_template('admin/admin_create_edit_tutor.html', form=form, state='Edit')
 
 

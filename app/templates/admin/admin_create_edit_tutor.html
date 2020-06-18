@@ -17,7 +17,7 @@
 
 <div class="row">
     <div class="col-sm-7 col-md-6 col-lg-5 col-centered">
-        <h1>{{state}} User</h1>
+        <h1>{{state}} User</h1>aaaa{{form.password.value}}bbbbbbb
         <ul class="nav nav-tabs">
             <li class="active" ><a data-toggle="tab" href="#home" id="tab1">Main info</a></li>
             <li><a data-toggle="tab" href="#menu2" id="tab2" onclick="validate()" class="tutor_tab">Availability</a></li>
@@ -75,6 +75,9 @@
    // this code ensures that we go back to the dates tab when adding or removing times
    {% if time_state == "manage_time" %}
         window.addEventListener("load",function(){document.getElementById('tab2').click();})
+   {% endif %} 
+   {% if state == "Edit" %}
+        window.addEventListener("load",function(){document.getElementById('password').value="not_updated";})
    {% endif %} 
     window.addEventListener("load",checkRole)
     document.getElementById('roles').addEventListener("change", checkRole); 

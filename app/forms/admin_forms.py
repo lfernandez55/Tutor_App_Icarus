@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectMultipleField, \
                     SelectField, validators, PasswordField, FieldList, FormField, \
-                    IntegerField, HiddenField, BooleanField
+                    IntegerField, HiddenField, BooleanField, ValidationError
 from wtforms_components import TimeField
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, widgets
 from app.models.user_models import Language
+from app.models.user_models import User
 
 class TimeCustomForm(FlaskForm):
     id = HiddenField(label="")
@@ -22,15 +23,30 @@ class UserCustomForm(FlaskForm):
         validators.DataRequired('First name is required')])
     last_name = StringField('Last name', validators=[
         validators.DataRequired('Last name is required')])
-    email = StringField('Email', validators=[
-        validators.DataRequired('Email is required')])
-    password = PasswordField('Password')
+    email = StringField('Email')
+    password = PasswordField('Password', validators=[
+        validators.DataRequired('First name is required')])
     roles = SelectMultipleField(label='Roles', coerce=int)
 
     # tutor = FormField(TutorCustomForm, 'Tutor Specific Fields')
     # add_child = SubmitField(label='Tutor Specific Info')
 
     submit = SubmitField('Save')
+
+    def validate_email(form, field):
+        print("DDDDDDDDDDDDDDDDDDDDDDDD:", form, field)
+        if field.raw_data == "":
+            raise ValidationError('Email cannot be blank')
+        else:
+            result = User.query.filter_by(email=field.data).first()
+            if result:
+                raise ValidationError('Email must be unique')
+            
+        # if not field.raw_data:
+        #     result = User.query.filter_by(email=form.field.data).first()
+        #     if result:
+        #         raise ValidationError('Email must be unique')
+        # raise ValidationError('Email cannot be blank')
 
 class RoleCustomForm(FlaskForm):
     name = StringField('Role name', validators=[
