@@ -21,9 +21,9 @@
         
         <ul class="nav nav-tabs">
             <li class="active" ><a data-toggle="tab" href="#home" id="tab1">Main info</a></li>
-            <li><a data-toggle="tab" href="#menu1" id="tab2" onclick="validate()">Availability</a></li>
-            <li><a data-toggle="tab" href="#menu2" id="tab3" onclick="validate()">Languages</a></li>
-            <li><a data-toggle="tab" href="#menu3" id="tab4" onclick="validate()">Courses</a></li>
+            <li><a data-toggle="tab" href="#menu2" id="tab2" onclick="validate()" class="tutor_tab">Availability</a></li>
+            <li><a data-toggle="tab" href="#menu3" id="tab3" onclick="validate()" class="tutor_tab">Languages</a></li>
+            <li><a data-toggle="tab" href="#menu4" id="tab4" onclick="validate()" class="tutor_tab" >Courses</a></li>
           </ul>
           
 
@@ -42,7 +42,7 @@
                   {{render_checkbox_field(form.display_in_sched)}}
 
                 </div>
-                <div id="menu1" class="tab-pane fade">
+                <div id="menu2" class="tab-pane fade">
                     {% for childform in form.dates %}
                         <fieldset class="form-group">
                             {% for field in childform %}
@@ -55,12 +55,12 @@
                     {{render_submit_field(form.add_time)}}
                     {{render_submit_field(form.remove_time)}}
                 </div>
-                <div id="menu2" class="tab-pane fade">
+                <div id="menu3" class="tab-pane fade">
                     {% for field in form.languages %}
                         <div>{{ field }} {{field.label}}</div>
                     {% endfor %} 
                 </div>
-                <div id="menu3" class="tab-pane fade">
+                <div id="menu4" class="tab-pane fade">
                     {% for field in form.courses %}
                         <div>{{ field }} {{field.label}}</div>
                     {% endfor %} 
@@ -75,20 +75,12 @@
 <script>
    // this code ensures that we go back to the dates tab when adding or removing times
    {% if state == "add_time" %}
-        window.onload = function()
-        {
-            document.getElementById('tab2').click();
-            document.getElementById('roles').onchange = checkRole;
-        };
-   {% else %} 
-        {
-            alert('ddddddbbb')
-            // document.getElementById('roles').addEventListener("onchange", checkRole);
-            document.getElementById('roles').onchange = checkRole;
-        };
+        window.addEventListener("load",function(){document.getElementById('tab2').click();})
    {% endif %} 
-
-
+    window.addEventListener("load",checkRole)
+    document.getElementById('roles').addEventListener("change", checkRole); 
+    
+    
 
     // A bug in wtforms hidden method will duplicate this element many times in the form.  So I don't make it hidden in wtforms.
     // Instead i hide it with javascript. see admin_forms.py for more info
@@ -121,41 +113,31 @@
 
     function checkRole(){
         rolesSelected = getSelectValues(document.getElementById('roles'));
-        alert(rolesSelected)
-        if (rolesSelected.includes("Tutor") == true){
+        if (rolesSelected.includes("Tutor") == true || rolesSelected.includes("tutor") == true){
             // reveal the tabs
-            alert("tutor is selected")
-            document.getElementById('tab2').style.display="block";
-            document.getElementById('tab3').style.display="block";
-            document.getElementById('tab4').style.display="block";
-            document.getElementById('menu1').style.display="block";
-            document.getElementById('menu2').style.display="block";
-            document.getElementById('menu3').style.display="block";
+            tutorTabs = document.getElementsByClassName('tutor_tab');
+            [].forEach.call(tutorTabs, (el)=> {el.style.display="block"});
         }else{
             // hide the tabs
-            document.getElementById('tab2').style.display="none";
-            document.getElementById('tab3').style.display="none";
-            document.getElementById('tab4').style.display="none";
-            document.getElementById('menu1').style.display="none";
-            document.getElementById('menu2').style.display="none";
-            document.getElementById('menu3').style.display="none";
+            tutorTabs = document.getElementsByClassName('tutor_tab');
+            [].forEach.call(tutorTabs, (el)=> {el.style.display="none"});
         }
     }
 
     function getSelectValues(select) {
-    var result = [];
-    var options = select && select.options;
-    var opt;
+        var result = [];
+        var options = select && select.options;
+        var opt;
 
-    for (var i=0, iLen=options.length; i<iLen; i++) {
-        opt = options[i];
+        for (var i=0, iLen=options.length; i<iLen; i++) {
+            opt = options[i];
 
-        if (opt.selected) {
-            // result.push(opt.value || opt.text);
-            result.push(opt.text);
+            if (opt.selected) {
+                // result.push(opt.value || opt.text);
+                result.push(opt.text);
+            }
         }
-    }
-    return result;
+        return result;
     }
 </script>
 

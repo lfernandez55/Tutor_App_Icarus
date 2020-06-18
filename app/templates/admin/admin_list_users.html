@@ -27,8 +27,7 @@
       </form>
     </div>
     <div class="col-sm-6 text-right">
-      <a class="btn btn-default btn-primary" href="{{ url_for('admin.admin_create_user') }}">Create User</a>
-      <a class="btn btn-default btn-primary" href="{{ url_for('admin.admin_create_tutor') }}">Create Tutor</a>
+      <a class="btn btn-default btn-primary" href="{{ url_for('admin.admin_create_tutor') }}">Create User/Tutor</a>
     </div>
   </div>
 
@@ -58,11 +57,9 @@
                 {% endif %}
             {% endfor %} 
           </td>
-          {% if tutor.total == 1   %}
+
           <td><a href="{{ url_for('admin.admin_edit_tutor', user_id=user.id) }}">edit</a></td>
-          {% else %}
-          <td><a href="{{ url_for('admin.admin_edit_user', user_id=user.id) }}">edit</a></td>         
-          {% endif %}
+
 
           <td><a href="{{ url_for('admin.admin_delete_user', user_id=user.id) }}">delete</a></td>
         </tr>

@@ -1,0 +1,159 @@
+{% extends "main/main_base.html" %} {# main/main_base.html extends layout.html #}
+{#  Overriding flask user macros because we need to put an id in the submit field....
+    {% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+#}
+{% from "common/form_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+{% block title %}{{app_name}}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
+    <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
+    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> > {{state}} Tutor
+</li>
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="row">
+    <div class="col-sm-7 col-md-6 col-lg-5 col-centered">
+        <h1>{{state}} User</h1>
+        <ul class="nav nav-tabs">
+            <li class="active" ><a data-toggle="tab" href="#home" id="tab1">Main info</a></li>
+            <li><a data-toggle="tab" href="#menu2" id="tab2" onclick="validate()" class="tutor_tab">Availability</a></li>
+            <li><a data-toggle="tab" href="#menu3" id="tab3" onclick="validate()" class="tutor_tab">Languages</a></li>
+            <li><a data-toggle="tab" href="#menu4" id="tab4" onclick="validate()" class="tutor_tab" >Courses</a></li>
+          </ul>
+          
+
+        <form action="" method="POST" class="form" role="form">
+
+            <div class="tab-content">
+                <div id="home" class="tab-pane fade in active">
+                  {{ form.hidden_tag() }}
+                  {{render_field(form.first_name)}}
+                  {{render_field(form.last_name)}}
+                  {{render_field(form.email)}}
+                  {{render_field(form.password)}}
+                  {{render_field(form.roles)}}
+                  {{render_field(form.phone)}}
+                  {{render_field(form.remove_time_id)}}
+                  {{render_checkbox_field(form.display_in_sched)}}
+
+                </div>
+                <div id="menu2" class="tab-pane fade">
+                    {% for childform in form.dates %}
+                        <fieldset class="form-group">
+                            {% for field in childform %}
+                                {{render_field(field)}}
+                            {% endfor %}
+                            <a class="remove-time" name="remove_time_link" id="{{loop.index}}">Remove {{loop.index}}</a>
+                        </fieldset>
+                    {% endfor %} 
+                    <br>
+                    {{render_submit_field(form.add_time)}}
+                    {{render_submit_field(form.remove_time)}}
+                </div>
+                <div id="menu3" class="tab-pane fade">
+                    {% for field in form.languages %}
+                        <div>{{ field }} {{field.label}}</div>
+                    {% endfor %} 
+                </div>
+                <div id="menu4" class="tab-pane fade">
+                    {% for field in form.courses %}
+                        <div>{{ field }} {{field.label}}</div>
+                    {% endfor %} 
+                </div>
+              </div>
+            <br>
+            {{render_submit_field(form.submit)}}
+        </form>
+    </div>
+</div>
+<br/>
+<script>
+   // this code ensures that we go back to the dates tab when adding or removing times
+   {% if time_state == "manage_time" %}
+        window.addEventListener("load",function(){document.getElementById('tab2').click();})
+   {% endif %} 
+    window.addEventListener("load",checkRole)
+    document.getElementById('roles').addEventListener("change", checkRole); 
+    
+    
+
+    // A bug in wtforms hidden method will duplicate this element many times in the form.  So I don't make it hidden in wtforms.
+    // Instead i hide it with javascript. see admin_forms.py for more info
+    document.getElementById('remove_time_id').style.display='none';
+    // this next line hides the remove a time button that is added by render_submit_field(form.remove_time) above
+    document.getElementsByName('remove_time')[0].style.display='none'; 
+    // in these next lines we add evenlisteners to the links in each time field group. when clicked these trigger
+    // the hidden remove time button
+    var collection = document.getElementsByName('remove_time_link');
+    for(var x=0; x < collection.length; x++){
+        console.log('DDDDDD')
+        collection[x].addEventListener('click',function(){clickMe(this)})
+    }
+
+    function clickMe(elem){
+        document.getElementById("remove_time_id").value = elem.id;
+        document.getElementsByName("remove_time")[0].click();
+    }
+    
+    function validate(){
+        // todo: add more robust email validation
+        if( document.getElementById('first_name').value == "" || document.getElementById('last_name').value == "" 
+        || document.getElementById('email').value == ""){
+            // go back to tab 1
+            setTimeout(function(){document.getElementById('tab1').click();},100)
+            // submit the form again to make the validation messages appear -- timeouts are needed here
+            setTimeout(function(){document.getElementById('submit').click();},500)
+        }
+    }
+
+    function checkRole(){
+        rolesSelected = getSelectValues(document.getElementById('roles'));
+        if (rolesSelected.includes("Tutor") == true || rolesSelected.includes("tutor") == true){
+            // reveal the tabs
+            tutorTabs = document.getElementsByClassName('tutor_tab');
+            [].forEach.call(tutorTabs, (el)=> {el.style.display="block"});
+        }else{
+            // hide the tabs
+            tutorTabs = document.getElementsByClassName('tutor_tab');
+            [].forEach.call(tutorTabs, (el)=> {el.style.display="none"});
+        }
+    }
+
+    function getSelectValues(select) {
+        var result = [];
+        var options = select && select.options;
+        var opt;
+
+        for (var i=0, iLen=options.length; i<iLen; i++) {
+            opt = options[i];
+
+            if (opt.selected) {
+                // result.push(opt.value || opt.text);
+                result.push(opt.text);
+            }
+        }
+        return result;
+    }
+</script>
+
+
+<style>
+    .remove-time{
+        cursor: pointer;
+    }
+    .tab-pane{
+        background-color: aliceblue;
+    }
+    .active{
+        padding: 2px;
+    }
+    .active, .active a{
+        background-color: aliceblue !important;
+    }
+</style>
+
+{% endblock %}
