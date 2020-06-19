@@ -57,37 +57,34 @@ def admin_create_tutor():
             roleObj = Role.query.filter(Role.id == role_id).first()
             user.roles.append(roleObj)
 
-        user.languages = []
-        for lang in form.languages:
-            if lang.checked is True:
-                langObj = Language.query.filter(Language.id == lang.data).first()
-                user.languages.append(langObj)
-
-        user.courses = []
-        for course in form.courses:
-            if course.checked is True:
-                courseObj = Course.query.filter(Course.id == course.data).first()
-                user.courses.append(courseObj)
-
         user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
 
         tutor = Tutor()
         tutor.tutor_phone = form.phone.data
         tutor.display_in_sched = form.display_in_sched.data
-        tutor.user_id = user.id
-        db.session.add(tutor)
-        db.session.commit()
+
+        tutor.languages = []
+        for lang in form.languages:
+            if lang.checked is True:
+                langObj = Language.query.filter(Language.id == lang.data).first()
+                tutor.languages.append(langObj)
+
+        tutor.courses = []
+        for course in form.courses:
+            if course.checked is True:
+                courseObj = Course.query.filter(Course.id == course.data).first()
+                tutor.courses.append(courseObj)
 
         for date_group in form.dates:
             time = Time()
             time.time_day = date_group['time_day'].data
             time.time_start = date_group['time_start'].data
             time.time_end = date_group['time_end'].data
-            time.tutor_id = tutor.id
-            db.session.add(time)
-            db.session.commit()
+            tutor.dates.append(time)
+
+        user.tutor = tutor
+        db.session.add(user)
+        db.session.commit()
 
         flash('User Created!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
@@ -104,11 +101,11 @@ def admin_edit_tutor(user_id):
         current_roles.append(str(role.id))
 
     current_languages = []
-    for lang in user.languages:
+    for lang in user.tutor.languages:
         current_languages.append(lang.id)
 
     current_courses = []
-    for course in user.courses:
+    for course in user.tutor.courses:
         current_courses.append(course.id)
 
     if user.tutor is None:
@@ -147,18 +144,6 @@ def admin_edit_tutor(user_id):
             roleObj = Role.query.filter(Role.id == role_id).first()
             user.roles.append(roleObj)
 
-        user.languages = []
-        for lang in form.languages:
-            if lang.checked is True:
-                langObj = Language.query.filter(Language.id == lang.data).first()
-                user.languages.append(langObj)
-
-        user.courses = []
-        for course in form.courses:
-            if course.checked is True:
-                courseObj = Course.query.filter(Course.id == course.data).first()
-                user.courses.append(courseObj)
-
         if form.password.data != "not_updated_flag":
             user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
 
@@ -169,13 +154,22 @@ def admin_edit_tutor(user_id):
         if user.tutor is None:
             tutor = Tutor()
             tutor.user_id = user.id
-            db.session.add(tutor)
-            db.session.commit()
-
 
         user.tutor.tutor_phone = form.phone.data
         user.tutor.display_in_sched = form.display_in_sched.data
-        
+
+        user.tutor.languages = []
+        for lang in form.languages:
+            if lang.checked is True:
+                langObj = Language.query.filter(Language.id == lang.data).first()
+                user.tutor.languages.append(langObj)
+
+        user.tutor.courses = []
+        for course in form.courses:
+            if course.checked is True:
+                courseObj = Course.query.filter(Course.id == course.data).first()
+                user.tutor.courses.append(courseObj)
+
         for date_group in form.dates:
             if date_group['id'].data != "":
                time = Time.query.filter(Time.id == date_group['id'].data).first()
@@ -190,7 +184,7 @@ def admin_edit_tutor(user_id):
 
         flash('User Updated!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
-    print("form.password:", form.first_name)
+
     return render_template('admin/admin_create_edit_tutor.html', form=form, state='Edit')
 
 

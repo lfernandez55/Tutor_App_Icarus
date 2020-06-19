@@ -10,12 +10,11 @@ class Language(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(50), unique=True)
 
-# Define the UserLanguages association table
-class UserLanguages(db.Model):
-    __tablename__ = 'users_languages'
+class TutorLanguages(db.Model):
+    __tablename__ = 'tutors_languages'
     id = db.Column(db.Integer(), primary_key=True)
     language_id = db.Column(db.Integer(), db.ForeignKey('languages.id', ondelete='CASCADE'))
-    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
+    tutor_id = db.Column(db.Integer(), db.ForeignKey('tutor.id', ondelete='CASCADE'))
 
 
 class Course(db.Model):
@@ -23,14 +22,11 @@ class Course(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(50), unique=True)
 
-
-# Define the UserCourses association table
-class UserCourses(db.Model):
-    __tablename__ = 'users_courses'
+class TutorCourses(db.Model):
+    __tablename__ = 'tutors_courses'
     id = db.Column(db.Integer(), primary_key=True)
     course_id = db.Column(db.Integer(), db.ForeignKey('courses.id', ondelete='CASCADE'))
-    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
-
+    tutor_id = db.Column(db.Integer(), db.ForeignKey('tutor.id', ondelete='CASCADE'))
 
 # Define the User data model. Make sure to add the flask_user.UserMixin !!
 class User(db.Model, UserMixin):
@@ -53,13 +49,6 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary='users_roles',
                             backref=db.backref('users', lazy='dynamic'))
 
-    languages = db.relationship('Language', secondary='users_languages',
-                    backref=db.backref('users', lazy='dynamic'))   
-
-    courses = db.relationship('Course', secondary='users_courses',
-                backref=db.backref('users', lazy='dynamic'))                                     
-    # tutor = db.relationship("Tutor", uselist=False, back_populates="users")
-    # tutor = db.relationship("Tutor", backref='users', cascade='all')
     # see https://stackoverflow.com/questions/7671886/attributeerror-instrumentedlist-object-has-no-attribute
     tutor = db.relationship("Tutor", backref='users', uselist=False, cascade='all')
     
@@ -86,6 +75,12 @@ class Tutor(db.Model):
     tutor_phone = db.Column(db.String(50)) 
     display_in_sched = db.Column(db.Boolean, unique=False)
     dates = db.relationship("Time", backref='tutor', cascade='all')
+
+    languages = db.relationship('Language', secondary='tutors_languages',
+                    backref=db.backref('users', lazy='dynamic'))   
+
+    courses = db.relationship('Course', secondary='tutors_courses',
+                backref=db.backref('users', lazy='dynamic')) 
 
 class Time(db.Model):
     __tablename__ = 'time'
