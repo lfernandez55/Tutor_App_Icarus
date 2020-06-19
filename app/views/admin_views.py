@@ -34,26 +34,27 @@ def admin_create_tutor():
     form.id=-1
 
     # adding the full set of select options to the select list 
-    rolesCollection = Role.query.all()
-    role_list = []
-    for role in rolesCollection:
-        role_list.append(role.name)
-    role_choices = list(enumerate(role_list,start=1))
-    form.roles.choices = role_choices
+    addTutorFormChoices(form)
+    # rolesCollection = Role.query.all()
+    # role_list = []
+    # for role in rolesCollection:
+    #     role_list.append(role.name)
+    # role_choices = list(enumerate(role_list,start=1))
+    # form.roles.choices = role_choices
 
-    langCollection = Language.query.all()
-    lang_list = []
-    for lang in langCollection:
-        lang_list.append(lang.name)
-    lang_choices = list(enumerate(lang_list,start=1))
-    form.languages.choices = lang_choices
+    # langCollection = Language.query.all()
+    # lang_list = []
+    # for lang in langCollection:
+    #     lang_list.append(lang.name)
+    # lang_choices = list(enumerate(lang_list,start=1))
+    # form.languages.choices = lang_choices
 
-    courseCollection = Course.query.all()
-    course_list = []
-    for course in courseCollection:
-        course_list.append(course.name)
-    course_choices = list(enumerate(course_list,start=1))
-    form.courses.choices = course_choices
+    # courseCollection = Course.query.all()
+    # course_list = []
+    # for course in courseCollection:
+    #     course_list.append(course.name)
+    # course_choices = list(enumerate(course_list,start=1))
+    # form.courses.choices = course_choices
 
     if form.add_time.data:
         form.dates.append_entry()
@@ -161,26 +162,7 @@ def admin_edit_tutor(user_id):
     # the above is a subset of the below
     # the above is the checked boxes, the below is all the check boxes
     # the above is the selected items, the below is all the items that can be selected
-    rolesCollection = Role.query.all()
-    role_list = []
-    for role in rolesCollection:
-        role_list.append(role.name)
-    role_choices = list(enumerate(role_list,start=1))
-    form.roles.choices = role_choices
-
-    langCollection = Language.query.all()
-    lang_list = []
-    for lang in langCollection:
-        lang_list.append(lang.name)
-    lang_choices = list(enumerate(lang_list,start=1))
-    form.languages.choices = lang_choices
-
-    courseCollection = Course.query.all()
-    course_list = []
-    for course in courseCollection:
-        course_list.append(course.name)
-    course_choices = list(enumerate(course_list,start=1))
-    form.courses.choices = course_choices
+    addTutorFormChoices(form)
 
     # instead of doing languages like roles I added the list of languages in the form. see admin_forms > languages
 
@@ -275,6 +257,29 @@ def admin_delete_user(user_id):
     db.session.commit()
     flash('User Deleted!!', 'success')
     return redirect(url_for('admin.admin_list_users'))
+
+def addTutorFormChoices(form):
+    rolesCollection = Role.query.all()
+    role_list = []
+    for role in rolesCollection:
+        role_list.append(role.name)
+    role_choices = list(enumerate(role_list,start=1))
+    form.roles.choices = role_choices
+
+    langCollection = Language.query.all()
+    lang_list = []
+    for lang in langCollection:
+        lang_list.append(lang.name)
+    lang_choices = list(enumerate(lang_list,start=1))
+    form.languages.choices = lang_choices
+
+    courseCollection = Course.query.all()
+    course_list = []
+    for course in courseCollection:
+        course_list.append(course.name)
+    course_choices = list(enumerate(course_list,start=1))
+    form.courses.choices = course_choices
+
 
 @admin_blueprint.route('/admin/list_roles', methods=['GET', 'POST'] )
 @roles_required('admin')  
