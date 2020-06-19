@@ -33,7 +33,7 @@ def admin_create_tutor():
     # this next line needed for a validation in the user model class
     form.id=-1
 
-    # adding the full set of select options to the select list (this is different than determining the default/selected options above)
+    # adding the full set of select options to the select list 
     rolesCollection = Role.query.all()
     role_list = []
     for role in rolesCollection:
@@ -55,15 +55,11 @@ def admin_create_tutor():
     course_choices = list(enumerate(course_list,start=1))
     form.courses.choices = course_choices
 
-    print(role_choices)
     if form.add_time.data:
         form.dates.append_entry()
         return render_template('admin/admin_create_edit_tutor.html', form=form, time_state='manage_time', state='Create')
 
     if form.remove_time.data:
-        print("DDDDDDDD", form.remove_time_id.data)
-        print("xxxxxxx", type(form.dates), len(form.dates))
-
         # since we are popping off items from the end of the list rather than the beginning the index of the item to remove is:
         index_of_item_to_remove = len(form.dates) - int(form.remove_time_id.data)
 
@@ -78,7 +74,6 @@ def admin_create_tutor():
 
         # reverse the reversedlist and repopulate form.dates
         form.dates = list(reversed(reversed_list))
-        print("popped_entry.data['id']", popped_entry.data['id'])
         if popped_entry.data['id']:
                 child = Time.query.filter(Time.id == popped_entry.data['id']).first()
                 db.session.delete(child)
@@ -96,13 +91,9 @@ def admin_create_tutor():
         for role_id in form.roles.data:
             roleObj = Role.query.filter(Role.id == role_id).first()
             user.roles.append(roleObj)
-        # todo: add in some password validations
 
         user.languages = []
         for lang in form.languages:
-            # print('dir(lang) dumps the attributes in the object: ', dir(lang) )
-            # print("          ")
-            # print('lang.__dict__ dumps the attributes and values: :', lang.__dict__)
             if lang.checked is True:
                 langObj = Language.query.filter(Language.id == lang.data).first()
                 user.languages.append(langObj)
@@ -125,7 +116,6 @@ def admin_create_tutor():
         db.session.commit()
 
         for date_group in form.dates:
-            print(date_group['time_day'].data, date_group['time_start'].data, date_group['time_end'].data)
             time = Time()
             time.time_day = date_group['time_day'].data
             time.time_start = date_group['time_start'].data
@@ -133,8 +123,6 @@ def admin_create_tutor():
             time.tutor_id = tutor.id
             db.session.add(time)
             db.session.commit()
-
-
 
         flash('User Created!!', 'success')
         return redirect(url_for('admin.admin_list_users'))
@@ -148,12 +136,10 @@ def admin_edit_tutor(user_id):
     # determining the options that the user has selected/checked
     current_roles = []
     for role in user.roles:
-        print('QQQQQQQQ')
         current_roles.append(str(role.id))
 
     current_languages = []
     for lang in user.languages:
-        # current_languages.append(str(lang.id))
         current_languages.append(lang.id)
 
     current_courses = []
@@ -169,7 +155,8 @@ def admin_edit_tutor(user_id):
 
     # this next line needed for a validation in the model user, see user_models.py.  i don't know why it's not 
     # instantiated above
-    form.id = user.id            
+    form.id = user.id 
+
     # adding the full set of select options to the select list (this is different than determining the default/selected options above)
     # the above is a subset of the below
     # the above is the checked boxes, the below is all the check boxes
@@ -250,6 +237,8 @@ def admin_edit_tutor(user_id):
 
         # kludge:  to accomodate the original admin and manager accounts that hadn't been assigned any tutor attributes
         # these need to be added regardless of whether the user has the tutor role. . . 
+        # A better approach to implement down the road is to see if any tutor specific attributes have been filled out in the form.
+        # If they have then run these next couple of lines.  Otherwise dont. 
         if user.tutor is None:
             tutor = Tutor()
             tutor.user_id = user.id
