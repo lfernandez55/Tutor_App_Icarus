@@ -3,7 +3,7 @@
  *************************/
 @media screen and (min-width: 700px) {
   .schedule {
-    height: calc(200vh); 
+    height: calc(100vh); /*adjusts vertical height of schedule */
     display: grid;
     grid-gap: .1em;
     grid-template-rows: [tracks] auto [time-0800] 0.5fr  [time-0815] 0.5fr 

@@ -8,7 +8,7 @@
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
     <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
-    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> > {{state}} Tutor
+    <a href="{{ url_for('admin.admin_list_users') }}">List Users</a> > {{state}} User
 </li>
 {% endblock %}
 
@@ -28,7 +28,7 @@
 
         <form action="" method="POST" class="form" role="form">
 
-            <div class="tab-content">
+            <div class="tab-content" >
                 <div id="home" class="tab-pane fade in active">
                   {{ form.hidden_tag() }}
                   {{render_field(form.first_name)}}
@@ -38,10 +38,10 @@
                   {{render_field(form.roles)}}
                   {{render_field(form.phone)}}
                   {{render_field(form.remove_time_id)}}
-                  {{render_checkbox_field(form.display_in_sched)}}
 
                 </div>
                 <div id="menu2" class="tab-pane fade">
+                    {{render_checkbox_field(form.display_in_sched)}}
                     {% for childform in form.dates %}
                         <fieldset class="form-group">
                             {% for field in childform %}
@@ -160,6 +160,9 @@
     }
     .active, .active a{
         background-color: aliceblue !important;
+    }
+    .form-group{
+        margin: 0 5px;
     }
 </style>
 

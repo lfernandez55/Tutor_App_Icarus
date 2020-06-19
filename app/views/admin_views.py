@@ -95,6 +95,16 @@ def admin_create_tutor():
 def admin_edit_tutor(user_id):
     user = User.query.filter(User.id == user_id).first()
 
+    # kludge:  to accomodate the original admin and manager accounts that hadn't been assigned any tutor attributes
+    # these need to be added regardless of whether the user has the tutor role. . . 
+    # A better approach to implement down the road is to see if any tutor specific attributes have been filled out in the form.
+    # If they have then run these next couple of lines.  Otherwise dont. 
+    if user.tutor is None:
+        tutor = Tutor()
+        tutor.user_id = user.id
+        db.session.add(tutor)
+        db.session.commit()
+
     # determining the options that the user has selected/checked
     current_roles = []
     for role in user.roles:
@@ -147,13 +157,7 @@ def admin_edit_tutor(user_id):
         if form.password.data != "not_updated_flag":
             user.password=current_app.user_manager.password_manager.hash_password(form.password.data)
 
-        # kludge:  to accomodate the original admin and manager accounts that hadn't been assigned any tutor attributes
-        # these need to be added regardless of whether the user has the tutor role. . . 
-        # A better approach to implement down the road is to see if any tutor specific attributes have been filled out in the form.
-        # If they have then run these next couple of lines.  Otherwise dont. 
-        if user.tutor is None:
-            tutor = Tutor()
-            tutor.user_id = user.id
+
 
         user.tutor.tutor_phone = form.phone.data
         user.tutor.display_in_sched = form.display_in_sched.data
