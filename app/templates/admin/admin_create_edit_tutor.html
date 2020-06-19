@@ -66,6 +66,9 @@
                 </div>
               </div>
             <br>
+            {% if form.errors %}
+                <div style="color: red; margin-bottom: 10px">You have validation errors. Check each tab for details.</div>
+            {% endif %}
             {{render_submit_field(form.submit)}}
         </form>
     </div>
@@ -79,6 +82,7 @@
    {% if state == "Edit" %}
         window.addEventListener("load",function(){document.getElementById('password').value="not_updated";})
    {% endif %} 
+    document.getElementById('password').type="password"
     window.addEventListener("load",checkRole)
     document.getElementById('roles').addEventListener("change", checkRole); 
     

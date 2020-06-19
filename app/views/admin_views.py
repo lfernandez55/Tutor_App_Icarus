@@ -26,62 +26,26 @@ def admin_list_users():
     
     return render_template('admin/admin_list_users.html', users=users)  
 
+#############################BEGIN CREATE EDIT DELETE TUTOR VIEWS######################################
+#######################################################################################################
+
 @admin_blueprint.route('/admin/create_tutor', methods=['GET', 'POST'] )
 @roles_required('admin')  # Limits access to users with the 'admin' role
 def admin_create_tutor():
+
     form = TutorCustomForm()
     # this next line needed for a validation in the user model class
     form.id=-1
 
     # adding the full set of select options to the select list 
     addTutorFormChoices(form)
-    # rolesCollection = Role.query.all()
-    # role_list = []
-    # for role in rolesCollection:
-    #     role_list.append(role.name)
-    # role_choices = list(enumerate(role_list,start=1))
-    # form.roles.choices = role_choices
-
-    # langCollection = Language.query.all()
-    # lang_list = []
-    # for lang in langCollection:
-    #     lang_list.append(lang.name)
-    # lang_choices = list(enumerate(lang_list,start=1))
-    # form.languages.choices = lang_choices
-
-    # courseCollection = Course.query.all()
-    # course_list = []
-    # for course in courseCollection:
-    #     course_list.append(course.name)
-    # course_choices = list(enumerate(course_list,start=1))
-    # form.courses.choices = course_choices
-
     if form.add_time.data:
         form.dates.append_entry()
         return render_template('admin/admin_create_edit_tutor.html', form=form, time_state='manage_time', state='Create')
 
     if form.remove_time.data:
-        # since we are popping off items from the end of the list rather than the beginning the index of the item to remove is:
-        index_of_item_to_remove = len(form.dates) - int(form.remove_time_id.data)
-
-        # pop off all the items in the fieldlist, and append them to the reverselist with the exception of the item to remove
-        reversed_list = []
-        number_of_dates = len(form.dates)
-        for x in range(number_of_dates ):
-            if index_of_item_to_remove == x:
-                popped_entry = form.dates.pop_entry()
-            else:
-                reversed_list.append(form.dates.pop_entry())
-
-        # reverse the reversedlist and repopulate form.dates
-        form.dates = list(reversed(reversed_list))
-        if popped_entry.data['id']:
-                child = Time.query.filter(Time.id == popped_entry.data['id']).first()
-                db.session.delete(child)
-                db.session.commit()
-
+        removeTime(form)
         return render_template('admin/admin_create_edit_tutor.html', form=form, time_state='manage_time', state='Create')
-
 
     if form.validate_on_submit():
         user = User()
@@ -163,34 +127,15 @@ def admin_edit_tutor(user_id):
     # the above is the checked boxes, the below is all the check boxes
     # the above is the selected items, the below is all the items that can be selected
     addTutorFormChoices(form)
+    
 
-    # instead of doing languages like roles I added the list of languages in the form. see admin_forms > languages
 
     if form.add_time.data:
         form.dates.append_entry()
         return render_template('admin/admin_create_edit_tutor.html', form=form, time_state='manage_time', state='Edit')
 
     if form.remove_time.data:
-        # since we are popping off items from the end of the list rather than the beginning the index of the item to remove is:
-        index_of_item_to_remove = len(form.dates) - int(form.remove_time_id.data)
-
-        # pop off all the items in the fieldlist, and append them to the reverselist with the exception of the item to remove
-        reversed_list = []
-        number_of_dates = len(form.dates)
-        for x in range(number_of_dates ):
-            if index_of_item_to_remove == x:
-                popped_entry = form.dates.pop_entry()
-            else:
-                reversed_list.append(form.dates.pop_entry())
-
-        # reverse the reversedlist and repopulate form.dates
-        form.dates = list(reversed(reversed_list))
-        print("popped_entry.data['id']", popped_entry.data['id'])
-        if popped_entry.data['id']:
-                child = Time.query.filter(Time.id == popped_entry.data['id']).first()
-                db.session.delete(child)
-                db.session.commit()
-
+        removeTime(form)
         return render_template('admin/admin_create_edit_tutor.html', form=form, time_state='manage_time', state='Edit')
 
     if form.validate_on_submit():
@@ -279,6 +224,29 @@ def addTutorFormChoices(form):
         course_list.append(course.name)
     course_choices = list(enumerate(course_list,start=1))
     form.courses.choices = course_choices
+
+def removeTime(form):
+        # since we are popping off items from the end of the list rather than the beginning the index of the item to remove is:
+        index_of_item_to_remove = len(form.dates) - int(form.remove_time_id.data)
+
+        # pop off all the items in the fieldlist, and append them to the reverselist with the exception of the item to remove
+        reversed_list = []
+        number_of_dates = len(form.dates)
+        for x in range(number_of_dates ):
+            if index_of_item_to_remove == x:
+                popped_entry = form.dates.pop_entry()
+            else:
+                reversed_list.append(form.dates.pop_entry())
+
+        # reverse the reversedlist and repopulate form.dates
+        form.dates = list(reversed(reversed_list))
+        if popped_entry.data['id']:
+                child = Time.query.filter(Time.id == popped_entry.data['id']).first()
+                db.session.delete(child)
+                db.session.commit()
+
+#############################END CREATE EDIT DELETE TUTOR VIEWS######################################
+#######################################################################################################
 
 
 @admin_blueprint.route('/admin/list_roles', methods=['GET', 'POST'] )

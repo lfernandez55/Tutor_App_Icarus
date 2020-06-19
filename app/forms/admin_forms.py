@@ -24,12 +24,9 @@ class UserCustomForm(FlaskForm):
     last_name = StringField('Last name', validators=[
         validators.DataRequired('Last name is required')])
     email = StringField('Email')
-    password = PasswordField('Password', validators=[
-        validators.DataRequired('First name is required')])
+    password = StringField('Password', validators=[
+        validators.DataRequired('Password is required')])
     roles = SelectMultipleField(label='Roles', coerce=int)
-
-    # tutor = FormField(TutorCustomForm, 'Tutor Specific Fields')
-    # add_child = SubmitField(label='Tutor Specific Info')
 
     submit = SubmitField('Save')
 
