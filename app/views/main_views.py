@@ -63,53 +63,61 @@ def schedule():
 @main_blueprint.route('/schedule_json', methods={'GET'})
 def schedule_json():
     # minute 807 in https://scotch.io/bar-talk/processing-incoming-request-data-in-flask
-    print('args:', request.args.get('skill_id')) 
     skill_id = request.args.get('skill_id')
     dayArray = [1, 2, 3, 4, 5, 6, 7]
     slotArray = []
     for day in dayArray:
-        if "lang" in skill_id:
-            lang_id = skill_id.split("_")[1]
-            Time.query.join(Tutor).join(Language).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True)).filter(Language.id == lang.id).order_by(Time.time_day)
-        elif "course" in skill_id:
-            course_id = skill_id.split("_")[1]
-            sqlString = """
-                SELECT DISTINCT * FROM Time 
-                INNER JOIN Tutor ON Time.tutor_id=Tutor.id 
-                INNER JOIN Users ON Users.id=Tutor.user_id
-                WHERE Time.time_day = dayVar AND Tutor.display_in_sched = 1 AND 
-                Tutor.id IN
-                (
-                SELECT tutor.id FROM tutor INNER JOIN tutors_courses ON tutor.id = tutors_courses.tutor_id WHERE course_id = courseVar 
-                )
-                ORDER BY Time.time_day
-            """
-            sqlString = sqlString.replace("dayVar",str(day))
-            sqlString = sqlString.replace("courseVar",str(course_id))
-            slots = db.engine.execute(sqlString)
-            print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
-            for slot in slots:
-                slotObj = {}
-                ts = str(slot.time_start)
-                te = str(slot.time_end)
-                print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",slot.time_day, slot.time_start, slot.time_end)
-                slotObj = {"id":slot.tutor_id, 'day':slot.time_day, 'time_start':ts, 'time_end': te,  \
-                'display': slot.display_in_sched, \
-                'tutor_first_name': slot.first_name, 'tutor_last_name': slot.last_name}
-
-                print(slotObj)
-                slotArray.append(slotObj)
-        else:
+        if skill_id == "":
             slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True)).order_by(Time.time_day)
             for slot in slots:
                 slotObj = {}
                 ts = str(slot.time_start)
                 te = str(slot.time_end)
-                print("DDDDDDDDDDDDDDDDDDXXXXYYYYYYY",slot.time_day, slot.time_start, slot.time_end)
-                print("DDDDDDDDDDDDDDDDDDXXXXYYYYYYYzzzzz",slot.tutor.display_in_sched)
                 slotObj = {"id":slot.tutor.id, 'day':slot.time_day, 'time_start':ts, 'time_end': te,  \
                 'display': slot.tutor.display_in_sched, \
                 'tutor_first_name': slot.tutor.users.first_name, 'tutor_last_name': slot.tutor.users.last_name}
+
+                print(slotObj)
+                slotArray.append(slotObj)
+        else:
+            if "lang" in skill_id:
+                lang_id = skill_id.split("_")[1]
+                sqlString = """
+                    SELECT DISTINCT * FROM Time 
+                    INNER JOIN Tutor ON Time.tutor_id=Tutor.id 
+                    INNER JOIN Users ON Users.id=Tutor.user_id
+                    WHERE Time.time_day = dayVar AND Tutor.display_in_sched = 1 AND 
+                    Tutor.id IN
+                    (
+                    SELECT tutor.id FROM tutor INNER JOIN tutors_languages ON tutor.id = tutors_languages.tutor_id WHERE language_id = langVar 
+                    )
+                    ORDER BY Time.time_day
+                """
+                sqlString = sqlString.replace("dayVar",str(day))
+                sqlString = sqlString.replace("langVar",str(lang_id))
+            elif "course" in skill_id:
+                course_id = skill_id.split("_")[1]
+                sqlString = """
+                    SELECT DISTINCT * FROM Time 
+                    INNER JOIN Tutor ON Time.tutor_id=Tutor.id 
+                    INNER JOIN Users ON Users.id=Tutor.user_id
+                    WHERE Time.time_day = dayVar AND Tutor.display_in_sched = 1 AND 
+                    Tutor.id IN
+                    (
+                    SELECT tutor.id FROM tutor INNER JOIN tutors_courses ON tutor.id = tutors_courses.tutor_id WHERE course_id = courseVar 
+                    )
+                    ORDER BY Time.time_day
+                """
+                sqlString = sqlString.replace("dayVar",str(day))
+                sqlString = sqlString.replace("courseVar",str(course_id))
+            slots = db.engine.execute(sqlString)
+            for slot in slots:
+                slotObj = {}
+                ts = str(slot.time_start)
+                te = str(slot.time_end)
+                slotObj = {"id":slot.tutor_id, 'day':slot.time_day, 'time_start':ts, 'time_end': te,  \
+                'display': slot.display_in_sched, \
+                'tutor_first_name': slot.first_name, 'tutor_last_name': slot.last_name}
 
                 print(slotObj)
                 slotArray.append(slotObj)
