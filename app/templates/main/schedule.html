@@ -2,8 +2,12 @@
 
 {% block title %}{{app_name}}{% endblock %}
 
-{% block navbar %}overriding the nav bar...
-{% endblock %}
+{# 
+    Comment out the following tag to add the nav bar in.  
+    If you display the nav override the body style in css/schedule_style.css so nav isn't crunched.    
+#}
+{% block navbar %}{% endblock %}
+    
 {% block body %}
 
 {% block page_content %}
@@ -11,9 +15,19 @@
 
 <link rel="stylesheet" href="/static/css/schedule_style.css">
 <script src="/static/js/schedule.js"></script>
-
-<h1>Schedule Page</h1>
-<button onclick="getSched()">Click here to load sched...</button>
+<div class="row">
+    <div class="col-sm-2 col-md-2 col-lg-2 "> aaaa
+    </div>
+    <div class="col-sm-8 col-md-8 col-lg-8 "> 
+        <h1 style="text-align: center; margin:0;">Weber State School of Computing Tutoring</h1>
+        <h4 style="text-align: center">No Appointments Necessary</h4>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2 "> 
+        <select id="skillList" onchange="getSched()">
+        </select>
+    </div>
+</div> 
+<!-- <button onclick="getSched()">Click here to load sched...</button> -->
 
 <div class="schedule" aria-labelledby="schedule-heading" id="schedArea">
 
@@ -27,7 +41,10 @@
         style="grid-column: thu-1-start / thu-2-end; grid-row: tracks;">Thursday</span>
     <span class="track-slot" aria-hidden="true"
         style="grid-column: fri-1-start / fri-2-end; grid-row: tracks;">Friday</span>
-
+    <span class="track-slot" aria-hidden="true"
+        style="grid-column: sat-1-start / sat-2-end; grid-row: tracks;">Saturday</span>
+    <span class="track-slot" aria-hidden="true"
+        style="grid-column: sun-1-start / sun-2-end; grid-row: tracks;">Sunday</span>
 
 
     <h2 class="time-slot" style="grid-row: time-0800;">8:00am</h2>
@@ -66,11 +83,14 @@
     </div>
     -->
 </div>
-
+<!-- <button onclick="calculateSlotAlignment()">calculateSlotAlignment</button> -->
 <script>
+    window.addEventListener("load",getSched)
+    window.addEventListener("load",getCoursesLangs)
     function getSched() {
-        var tutorId = 1;
-        var urlVar = '/schedule_json?tutor_id=' + tutorId;
+        var skillId = document.getElementById('skillList').value;
+        alert(skillId)
+        var urlVar = '/schedule_json?skill_id=' + skillId;
         var request = new Request(urlVar, {
             method: 'GET'
         });
@@ -85,6 +105,24 @@
                 alert('Error: ' + err.message);
             });
     }
+    function getCoursesLangs() {
+        var tutorId = 1;
+        var urlVar = '/schedule_courses_langs';
+        var request = new Request(urlVar, {
+            method: 'GET'
+        });
+        fetch(request)
+            .then((response) => {
+                return response.json();
+            })
+            .then((resp) => {
+                populateSkillList(resp)
+            })
+            .catch((err) => {
+                alert('Error: ' + err.message);
+            });
+    }
+
 
     // populates the schedule with the times when the tutor teaches
     function populateSched(slotArray) {
@@ -112,6 +150,18 @@
                 .time_start.substring(0, 5) + "-" + slotArray[x].time_end.substring(0, 5) + '</span>';
             document.getElementById('schedArea').appendChild(divVar);
              
+        }
+
+    }
+
+    // populates the dropdown
+    function populateSkillList(skillArray) {
+        var sel = document.getElementById('skillList');
+        for(var i = 0; i < skillArray.length; i++) {
+            var opt = document.createElement('option');
+            opt.innerHTML = skillArray[i].name;
+            opt.value = skillArray[i].value;
+            sel.appendChild(opt);
         }
 
     }
@@ -163,14 +213,18 @@
         2: 'tue',
         3: 'wed',
         4: 'thu',
-        5: 'fri'
+        5: 'fri',
+        6: 'sat',
+        7: 'sun'
     }
     var dayOfWeekLongFormat = {
         1: 'Monday',
         2: 'Tuesday',
         3: 'Wednesday',
         4: 'Thursday',
-        5: 'Friday'
+        5: 'Friday',
+        6: 'Saturday',
+        7: 'Sunday'
     }
     
     var coordLeft = {
@@ -203,6 +257,7 @@
         unusedColors: ['tutor-1', 'tutor-2', 'tutor-3', 'tutor-4', 'tutor-5', 'tutor-6']
     }
 </script>
-<button onclick="calculateSlotAlignment()">calculateSlotAlignment</button>
+
 {% endblock %}
+
 {% endblock %}

@@ -8,7 +8,7 @@ from flask import request, url_for, current_app, jsonify, json
 from flask_user import current_user, login_required, roles_required
 
 from app import db
-from app.models.user_models import User, Role, Tutor, Time
+from app.models.user_models import User, Role, Tutor, Time, Course, Language
 from app.forms.book_forms import BookForm
 from app.forms.main_forms import UserProfileForm
 
@@ -62,14 +62,20 @@ def schedule():
 # example url: http://127.0.0.1:2000/schedule_json?tutor=aaaa
 @main_blueprint.route('/schedule_json', methods={'GET'})
 def schedule_json():
-    print('in check guess')
     # minute 807 in https://scotch.io/bar-talk/processing-incoming-request-data-in-flask
-    print('args:', request.args.get('tutor_id')) 
-
+    print('args:', request.args.get('skill_id')) 
+    skill_id = request.args.get('skill_id')
     dayArray = [1, 2, 3, 4, 5, 6, 7]
     slotArray = []
     for day in dayArray:
-        slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True)).order_by(Time.time_day)
+        if "lang" in skill_id:
+            lang_id = skill_id.split("_")[1]
+            Time.query.join(Tutor).join(Language).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True)).filter(Language.id == lang.id).order_by(Time.time_day)
+        elif "course" in skill_id:
+            course_id = skill_id.split("_")[1]
+            slots = Time.query.join(Tutor).join(Course).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True)).filter(Course.id == course.id).order_by(Time.time_day)
+        else:
+            slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True)).order_by(Time.time_day)
         for slot in slots:
             slotObj = {}
             ts = str(slot.time_start)
@@ -81,3 +87,21 @@ def schedule_json():
             print(slotObj)
             slotArray.append(slotObj)
     return jsonify(slotArray)
+
+
+@main_blueprint.route('/schedule_courses_langs', methods={'GET'})
+def schedule_courses_langs():
+
+    courses = Course.query.order_by(Course.name).all()
+    languages = Language.query.order_by(Language.name).all()
+
+    skillArray = []
+    for course in courses:
+        skillObj = {}
+        skillObj = {"id":course.id, 'name':course.name, "value": "course_" + str(course.id)}
+        skillArray.append(skillObj)
+    for lang in languages:
+        skillObj = {}
+        skillObj = {"id":lang.id, 'name':lang.name, "value": "lang_" + str(lang.id)}
+        skillArray.append(skillObj)
+    return jsonify(skillArray)
