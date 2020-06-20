@@ -89,7 +89,6 @@
     window.addEventListener("load",getCoursesLangs)
     function getSched() {
         var skillId = document.getElementById('skillList').value;
-        alert(skillId)
         var urlVar = '/schedule_json?skill_id=' + skillId;
         var request = new Request(urlVar, {
             method: 'GET'
