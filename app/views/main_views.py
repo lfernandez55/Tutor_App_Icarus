@@ -75,8 +75,8 @@ def schedule_json():
             course_id = skill_id.split("_")[1]
             sqlString = """
                 SELECT DISTINCT * FROM Time 
-                JOIN Tutor ON Time.tutor_id=Tutor.id 
-                JOIN Users ON Users.id=Tutor.user_id
+                INNER JOIN Tutor ON Time.tutor_id=Tutor.id 
+                INNER JOIN Users ON Users.id=Tutor.user_id
                 WHERE Time.time_day = dayVar AND Tutor.display_in_sched = 1 AND 
                 Tutor.id IN
                 (
@@ -87,16 +87,18 @@ def schedule_json():
             sqlString = sqlString.replace("dayVar",str(day))
             sqlString = sqlString.replace("courseVar",str(course_id))
             slots = db.engine.execute(sqlString)
+            print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
             for slot in slots:
                 slotObj = {}
                 ts = str(slot.time_start)
                 te = str(slot.time_end)
-                print("DDDDDDDDDDDDDDDDDDXXXXYYYYYYY",slot.time_day, slot.time_start, slot.time_end)
+                print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",slot.time_day, slot.time_start, slot.time_end)
                 slotObj = {"id":slot.tutor_id, 'day':slot.time_day, 'time_start':ts, 'time_end': te,  \
                 'display': slot.display_in_sched, \
                 'tutor_first_name': slot.first_name, 'tutor_last_name': slot.last_name}
 
                 print(slotObj)
+                slotArray.append(slotObj)
         else:
             slots = Time.query.join(Tutor).filter(Time.time_day == day).filter(Tutor.display_in_sched.is_(True)).order_by(Time.time_day)
             for slot in slots:
@@ -110,7 +112,7 @@ def schedule_json():
                 'tutor_first_name': slot.tutor.users.first_name, 'tutor_last_name': slot.tutor.users.last_name}
 
                 print(slotObj)
-        slotArray.append(slotObj)
+                slotArray.append(slotObj)
     return jsonify(slotArray)
 
 

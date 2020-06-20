@@ -16,13 +16,13 @@
 <link rel="stylesheet" href="/static/css/schedule_style.css">
 <script src="/static/js/schedule.js"></script>
 <div class="row">
-    <div class="col-sm-2 col-md-2 col-lg-2 "> aaaa
+    <div class="col-sm-2 col-md-2 col-lg-2 "> 
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8 "> 
         <h1 style="text-align: center; margin:0;">Weber State School of Computing Tutoring</h1>
         <h4 style="text-align: center">No Appointments Necessary</h4>
     </div>
-    <div class="col-sm-2 col-md-2 col-lg-2 "> 
+    <div class="col-sm-2 col-md-2 col-lg-2 " style="background-color:aliceblue"> Show only tutors who have taken:
         <select id="skillList" onchange="getSched()">
         </select>
     </div>
@@ -88,6 +88,7 @@
     window.addEventListener("load",getSched)
     window.addEventListener("load",getCoursesLangs)
     function getSched() {
+
         var skillId = document.getElementById('skillList').value;
         var urlVar = '/schedule_json?skill_id=' + skillId;
         var request = new Request(urlVar, {
@@ -125,6 +126,17 @@
 
     // populates the schedule with the times when the tutor teaches
     function populateSched(slotArray) {
+        // remove any pre-existing elements before populating...
+        var sessions = document.getElementsByClassName('session');
+        while (sessions.length > 0){
+            sessions[0].remove();
+
+        }
+        var dayElements = document.getElementsByClassName('day');
+        while (dayElements.length > 0){
+            dayElements[0].remove();
+        }
+
         calculateSlotAlignment(slotArray);
 
         var previousDay="-1"
@@ -238,7 +250,8 @@
     }
 
     function trimEnd(timeStr) {
-        timeStr = timeStr.slice(0, -3);
+        // timeStr = timeStr.slice(0, -3);
+        timeStr = timeStr.slice(0, 5);
         timeStr = timeStr.replace(/:/g, "")
         return timeStr
     }
