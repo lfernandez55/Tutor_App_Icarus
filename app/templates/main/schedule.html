@@ -21,6 +21,26 @@
     <div class="col-sm-8 col-md-8 col-lg-8 "> 
         <h1 style="text-align: center; margin:0;">Weber State School of Computing Tutoring</h1>
         <h4 style="text-align: center">No Appointments Necessary</h4>
+
+        <div id="prompt" >
+            Popup text...
+         </div>
+         <style>
+            #prompt {
+            display: none;
+            position: absolute;
+            color: black;
+            padding: 40px;
+            border: solid 1px black;
+            text-align: center;
+            width: 10%;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+            }
+         </style>
+
+
     </div>
     <div class="col-sm-2 col-md-2 col-lg-2 " style="padding: 5px; background-color:aliceblue"> Show only tutors who have taken:
         <select id="skillList" onchange="getSched()">
@@ -83,6 +103,7 @@
     </div>
     -->
 </div>
+<button onclick="popUp()">pop me up</button>
 <!-- <button onclick="calculateSlotAlignment()">calculateSlotAlignment</button> -->
 <script>
     window.addEventListener("load",getSched)
@@ -154,6 +175,7 @@
             var divVar = document.createElement('div');
 
             divVar.setAttribute('class', tutorColor(slotArray[x].id));
+            divVar.setAttribute('onclick', 'popUp(this)');
             divVar.setAttribute('style', createStyle(slotArray[x]))
 
             divVar.innerHTML = '<h3 class="session-lead"><a href="#">' + slotArray[x].tutor_first_name + " " +
@@ -266,10 +288,22 @@
 
     }
     var tutorColorMap = {
-        unusedColors: ['tutor-1', 'tutor-2', 'tutor-3', 'tutor-4', 'tutor-5', 'tutor-6']
+        unusedColors: ['tutor-1', 'tutor-2', 'tutor-3', 'tutor-4', 'tutor-5', 'tutor-6', 'tutor-7', 'tutor-8', 'tutor-9']
+    }
+
+    function popUp(element){
+        var x = element.offsetLeft - 80; 
+        var y = element.offsetTop - 10;
+        var x_px = x + 'px';
+        var y_px = y + 'px'; 
+        document.getElementById("prompt").style.left = x_px;
+        document.getElementById("prompt").style.top = y_px;
+        document.getElementById("prompt").style.display = "block";
+        document.getElementById("prompt").style.zIndex = 20;
+
     }
 </script>
-
+<button type="button" id="myBtn" onclick="myFunction()">Set left position to 100 px</button>
 {% endblock %}
 
 {% endblock %}
