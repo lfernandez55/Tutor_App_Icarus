@@ -42,7 +42,7 @@
 
 
     </div>
-    <div class="col-sm-2 col-md-2 col-lg-2 " style="padding: 5px; background-color:aliceblue"> Show only tutors who have taken:
+    <div class="col-sm-2 col-md-2 col-lg-2 " style="padding: 5px; background-color:aliceblue; text-align: center"> Show only tutors who have taken:
         <select id="skillList" onchange="getSched()">
         </select>
     </div>
@@ -103,8 +103,36 @@
     </div>
     -->
 </div>
-<button onclick="popUp()">pop me up</button>
-<!-- <button onclick="calculateSlotAlignment()">calculateSlotAlignment</button> -->
+
+
+ 
+<!-- From https://www.w3schools.com/bootstrap/bootstrap_modal.asp
+We hide this button.  But we still click it indirectly when sessions are clicked. See popUpModal.
+-->
+<button type="button" style="display:none" id="modalButton" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Tutor Info</h4>
+      </div>
+      <div class="modal-body">
+        <p id="modalContent">Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 <script>
     window.addEventListener("load",getSched)
     window.addEventListener("load",getCoursesLangs)
@@ -175,7 +203,7 @@
             var divVar = document.createElement('div');
 
             divVar.setAttribute('class', tutorColor(slotArray[x].id));
-            divVar.setAttribute('onclick', 'popUp(this)');
+            divVar.setAttribute('onclick', 'popUpModal(this)');
             divVar.setAttribute('style', createStyle(slotArray[x]))
 
             divVar.innerHTML = '<h3 class="session-lead"><a href="#">' + slotArray[x].tutor_first_name + " " +
@@ -291,15 +319,10 @@
         unusedColors: ['tutor-1', 'tutor-2', 'tutor-3', 'tutor-4', 'tutor-5', 'tutor-6', 'tutor-7', 'tutor-8', 'tutor-9']
     }
 
-    function popUp(element){
-        var x = element.offsetLeft - 80; 
-        var y = element.offsetTop - 10;
-        var x_px = x + 'px';
-        var y_px = y + 'px'; 
-        document.getElementById("prompt").style.left = x_px;
-        document.getElementById("prompt").style.top = y_px;
-        document.getElementById("prompt").style.display = "block";
-        document.getElementById("prompt").style.zIndex = 20;
+    function popUpModal(element){
+        document.getElementById('modalButton').click();
+        // todo
+        document.getElementById('modalContent').innerHTML = element.innerHTML;
 
     }
 </script>

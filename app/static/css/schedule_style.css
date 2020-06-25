@@ -90,6 +90,7 @@
 /* Small-screen & fallback styles */
 .session {
   margin-bottom: 1em;
+  cursor: pointer;
 }
 
 @supports (display: grid) {
