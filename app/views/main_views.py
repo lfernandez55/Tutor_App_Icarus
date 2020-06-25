@@ -59,10 +59,6 @@ def user_profile_page():
 def schedule():
     return render_template('main/schedule.html')
 
-@main_blueprint.route('/schedulecopy')
-def schedulecopy():
-    return render_template('main/schedulecopy.html')
-
 # example url: http://127.0.0.1:2000/schedule_json?tutor=aaaa
 @main_blueprint.route('/schedule_json', methods={'GET'})
 def schedule_json():
