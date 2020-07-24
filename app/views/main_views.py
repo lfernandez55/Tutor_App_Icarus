@@ -140,3 +140,51 @@ def schedule_courses_langs():
         skillObj = {"id":lang.id, 'name':lang.name, "value": "lang_" + str(lang.id)}
         skillArray.append(skillObj)
     return jsonify(skillArray)
+
+@main_blueprint.route('/tutor_info', methods={'GET'})
+def tutor_info():
+
+    sqlString = """
+                    SELECT DISTINCT Users.last_name, Tutor.id as tutor_id, Courses.name as cname FROM Users 
+                    INNER JOIN Tutor ON Users.id=Tutor.user_id
+                    INNER JOIN Tutors_Courses ON Tutor.id=Tutors_Courses.tutor_id
+                    INNER JOIN Courses ON Tutors_Courses.course_id=Courses.id
+                    ORDER BY tutor_id
+
+                """
+
+
+
+    tutorSkills = db.engine.execute(sqlString)
+    print(tutorSkills)
+    previous_tutor_id = ""
+    tutorArray = []
+    tutorObj = {}
+    singleTutorCourseArray = []
+    first = True
+    for skill in tutorSkills:
+        print('aaaa', skill.last_name, skill.cname)
+        if first:
+            first = False
+            tutorObj = {}
+            tutorObj['tutor_id'] = skill.tutor_id
+            singleTutorCourseArray = []
+            singleTutorCourseArray.append("'"+ skill.cname+"'")
+        elif previous_tutor_id == skill.tutor_id:
+            singleTutorCourseArray.append("'"+ skill.cname+"'")
+            first = False
+            print('bbbb', skill.last_name, skill.cname)
+        else:
+            print('cccc', skill.last_name, skill.cname)
+            tutorObj['courseArray'] = "["+ ",".join(  list( dict.fromkeys(singleTutorCourseArray) )) +"]" 
+            tutorArray.append(tutorObj)
+
+            tutorObj = {}
+            tutorObj['tutor_id'] = skill.tutor_id
+            singleTutorCourseArray = []
+            singleTutorCourseArray.append("'"+ skill.cname+"'")
+            
+        previous_tutor_id = skill.tutor_id  
+    tutorObj['courseArray'] = "["+ ",".join(  list( dict.fromkeys(singleTutorCourseArray) )) +"]" 
+    tutorArray.append(tutorObj)    
+    return jsonify(tutorArray)
