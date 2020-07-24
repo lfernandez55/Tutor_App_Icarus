@@ -141,8 +141,47 @@ def schedule_courses_langs():
         skillArray.append(skillObj)
     return jsonify(skillArray)
 
+
+
 @main_blueprint.route('/tutor_info', methods={'GET'})
 def tutor_info():
+    userQuery = User.query.join(Tutor).filter(Tutor.display_in_sched == True ).all()
+    userArray = []
+    for u in userQuery:
+        userObj = {}
+        userObj['first_name'] = u.first_name
+        userObj['last_name'] = u.last_name
+        userObj['id'] = u.id
+        userObj['tutor_id'] = u.tutor.id
+        userObj['display_in_sched'] = u.tutor.display_in_sched
+        courseStr = "["
+        first = True
+        for courseName in u.tutor.courses:
+            if first:
+                courseStr = courseStr + courseName.name
+                first = False
+            else:
+                courseStr = courseStr + "," + courseName.name
+        userObj['courses'] = courseStr + "]" 
+
+        langStr = "["
+        first = True
+        for langName in u.tutor.courses:
+            if first:
+                langStr = langStr + langName.name
+                first = False
+            else:
+                langStr = langStr + "," + langName.name
+        userObj['languages'] = langStr + "]" 
+
+
+        userArray.append(userObj)
+    print(userArray)
+    return jsonify(userArray)
+
+# retire this
+@main_blueprint.route('/tutor_info2', methods={'GET'})
+def tutor_info2():
 
     sqlString = """
                     SELECT DISTINCT Users.last_name, Tutor.id as tutor_id, Courses.name as cname, '' as lname FROM Users 
