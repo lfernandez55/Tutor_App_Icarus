@@ -145,11 +145,16 @@ def schedule_courses_langs():
 def tutor_info():
 
     sqlString = """
-                    SELECT DISTINCT Users.last_name, Tutor.id as tutor_id, Courses.name as cname FROM Users 
+                    SELECT DISTINCT Users.last_name, Tutor.id as tutor_id, Courses.name as cname, '' as lname FROM Users 
                     INNER JOIN Tutor ON Users.id=Tutor.user_id
                     INNER JOIN Tutors_Courses ON Tutor.id=Tutors_Courses.tutor_id
                     INNER JOIN Courses ON Tutors_Courses.course_id=Courses.id
-                    ORDER BY tutor_id
+					UNION
+					SELECT DISTINCT Users.last_name, Tutor.id as tutor_id, '' as cname, Languages.name as lname FROM Users 
+                    INNER JOIN Tutor ON Users.id=Tutor.user_id
+                    INNER JOIN Tutors_Languages ON Tutor.id=Tutors_Languages.tutor_id
+                    INNER JOIN Languages ON Tutors_Languages.language_id=Languages.id
+					ORDER BY Tutor.id, cname, lname
 
                 """
 
@@ -161,30 +166,38 @@ def tutor_info():
     tutorArray = []
     tutorObj = {}
     singleTutorCourseArray = []
+    singleTutorLanguageArray = []
     first = True
     for skill in tutorSkills:
-        print('aaaa', skill.last_name, skill.cname)
+        print('aaaa', skill.last_name, skill.cname, skill.lname)
         if first:
             first = False
             tutorObj = {}
             tutorObj['tutor_id'] = skill.tutor_id
             singleTutorCourseArray = []
             singleTutorCourseArray.append("'"+ skill.cname+"'")
+            singleTutorLanguageArray = []
+            singleTutorLanguageArray.append("'"+ skill.lname+"'")
         elif previous_tutor_id == skill.tutor_id:
             singleTutorCourseArray.append("'"+ skill.cname+"'")
+            singleTutorLanguageArray.append("'"+ skill.lname+"'")
             first = False
             print('bbbb', skill.last_name, skill.cname)
         else:
             print('cccc', skill.last_name, skill.cname)
             tutorObj['courseArray'] = "["+ ",".join(  list( dict.fromkeys(singleTutorCourseArray) )) +"]" 
+            tutorObj['languageArray'] = "["+ ",".join(  list( dict.fromkeys(singleTutorLanguageArray) )) +"]" 
             tutorArray.append(tutorObj)
 
             tutorObj = {}
             tutorObj['tutor_id'] = skill.tutor_id
             singleTutorCourseArray = []
             singleTutorCourseArray.append("'"+ skill.cname+"'")
-            
+            singleTutorLanguageArray = []
+            singleTutorLanguageArray.append("'"+ skill.lname+"'")
+
         previous_tutor_id = skill.tutor_id  
     tutorObj['courseArray'] = "["+ ",".join(  list( dict.fromkeys(singleTutorCourseArray) )) +"]" 
+    tutorObj['languageArray'] = "["+ ",".join(  list( dict.fromkeys(singleTutorLanguageArray) )) +"]" 
     tutorArray.append(tutorObj)    
     return jsonify(tutorArray)
