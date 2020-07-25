@@ -21,7 +21,7 @@
     <div class="col-sm-8 col-md-8 col-lg-8 "> 
         <h1 style="text-align: center; margin:0;">Weber State School of Computing Tutoring</h1>
         <h4 style="text-align: center">No Appointments Necessary</h4>
-
+        <button onclick="tootInfo()">DELETE THIS SOON...</button>
         <div id="prompt" >
             Popup text...
          </div>
@@ -136,6 +136,7 @@ We hide this button.  But we still click it indirectly when sessions are clicked
 <script>
     window.addEventListener("load",getSched)
     window.addEventListener("load",getCoursesLangs)
+    window.addEventListener("load",getTutorInfo)
     function getSched() {
 
         var skillId = document.getElementById('skillList').value;
@@ -171,7 +172,23 @@ We hide this button.  But we still click it indirectly when sessions are clicked
                 alert('Error: ' + err.message);
             });
     }
-
+    let tutorInfo;
+    function getTutorInfo() {
+        var urlVar = '/tutor_info';
+        var request = new Request(urlVar, {
+            method: 'GET'
+        });
+        fetch(request)
+            .then((response) => {
+                return response.json();
+            })
+            .then((resp) => {
+                tutorInfo = resp;
+            })
+            .catch((err) => {
+                alert('Error: ' + err.message);
+            });
+    }
 
     // populates the schedule with the times when the tutor teaches
     function populateSched(slotArray) {
@@ -203,6 +220,7 @@ We hide this button.  But we still click it indirectly when sessions are clicked
             var divVar = document.createElement('div');
 
             divVar.setAttribute('class', tutorColor(slotArray[x].id));
+            divVar.setAttribute('data-tutor_id', slotArray[x].id);
             divVar.setAttribute('onclick', 'popUpModal(this)');
             divVar.setAttribute('style', createStyle(slotArray[x]))
 
@@ -321,10 +339,25 @@ We hide this button.  But we still click it indirectly when sessions are clicked
 
     function popUpModal(element){
         document.getElementById('modalButton').click();
-        // todo
-        document.getElementById('modalContent').innerHTML = element.innerHTML;
+
+        let tutorContent
+        for (let index = 0; index < tutorInfo.length; index++) {
+            if (tutorInfo[index].tutor_id == element.getAttribute('data-tutor_id')){
+                tutorContent = "<div class='tutor-name'>" + tutorInfo[index].first_name + " " + tutorInfo[index].last_name + "</div>";
+                tutorContent += "<div class='courses'>" + "Courses:" + "</div>";
+                tutorContent += "<div class='course-list'>" +  tutorInfo[index].courses.join(", ") + "</div>";
+                tutorContent += "<div class='langs'>" + "Languages:" + "</div>";
+                tutorContent += "<div class='lang-list'>" +  tutorInfo[index].languages.join(", ") + "</div>";
+
+            }
+            
+        }
+
+        document.getElementById('modalContent').innerHTML = tutorContent;
 
     }
+
+
 </script>
 <button type="button" id="myBtn" onclick="myFunction()">Set left position to 100 px</button>
 {% endblock %}

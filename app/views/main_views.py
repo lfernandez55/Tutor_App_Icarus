@@ -154,29 +154,21 @@ def tutor_info():
         userObj['id'] = u.id
         userObj['tutor_id'] = u.tutor.id
         userObj['display_in_sched'] = u.tutor.display_in_sched
-        courseStr = "["
-        first = True
+
+        coursesArray = []
         for courseName in u.tutor.courses:
-            if first:
-                courseStr = courseStr + courseName.name
-                first = False
-            else:
-                courseStr = courseStr + "," + courseName.name
-        userObj['courses'] = courseStr + "]" 
+            coursesArray.append(courseName.name)
+        coursesArray.sort()
+        userObj['courses'] = coursesArray
 
-        langStr = "["
-        first = True
-        for langName in u.tutor.courses:
-            if first:
-                langStr = langStr + langName.name
-                first = False
-            else:
-                langStr = langStr + "," + langName.name
-        userObj['languages'] = langStr + "]" 
-
+        languagesArray = []
+        for langName in u.tutor.languages:
+            languagesArray.append(langName.name)
+        languagesArray.sort()     
+        userObj['languages'] = languagesArray 
 
         userArray.append(userObj)
-    print(userArray)
+
     return jsonify(userArray)
 
 # retire this

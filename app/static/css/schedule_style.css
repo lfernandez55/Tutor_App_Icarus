@@ -3,29 +3,29 @@
  *************************/
 @media screen and (min-width: 700px) {
   .schedule {
-    height: calc(100vh); /*adjusts vertical height of schedule */
+    height: calc(150vh); /*adjusts vertical height of schedule */
     display: grid;
     grid-gap: .1em;
-    grid-template-rows: [tracks] auto [time-0800] 0.5fr  [time-0815] 0.5fr 
-                                      [time-0830] 0.5fr  [time-0845] 0.5fr 
-                                      [time-0900] 0.5fr  [time-0915] 0.5fr 
-                                      [time-0930] 0.5fr  [time-0945] 0.5fr 
-                                      [time-1000] 0.5fr  [time-1015] 0.5fr 
-                                      [time-1030] 0.5fr  [time-1045] 0.5fr
-                                      [time-1100] 0.5fr  [time-1115] 0.5fr 
-                                      [time-1130] 0.5fr  [time-1145] 0.5fr
-                                      [time-1200] 0.5fr  [time-1215] 0.5fr 
-                                      [time-1230] 0.5fr  [time-1245] 0.5fr
-                                      [time-1300] 0.5fr  [time-1315] 0.5fr 
-                                      [time-1330] 0.5fr  [time-1345] 0.5fr
-                                      [time-1400] 0.5fr  [time-1415] 0.5fr 
-                                      [time-1430] 0.5fr  [time-1445] 0.5fr
-                                      [time-1500] 0.5fr  [time-1515] 0.5fr 
-                                      [time-1530] 0.5fr  [time-1545] 0.5fr
-                                      [time-1600] 0.5fr  [time-1615] 0.5fr 
-                                      [time-1630] 0.5fr  [time-1645] 0.5fr
-                                      [time-1700] 0.5fr  [time-1715] 0.5fr 
-                                      [time-1730] 0.5fr  [time-1745] 0.5fr                                      
+    grid-template-rows: [tracks] auto [time-0800] 1fr  [time-0815] 1fr 
+                                      [time-0830] 1fr  [time-0845] 1fr 
+                                      [time-0900] 1fr  [time-0915] 1fr 
+                                      [time-0930] 1fr  [time-0945] 1fr 
+                                      [time-1000] 1fr  [time-1015] 1fr 
+                                      [time-1030] 1fr  [time-1045] 1fr
+                                      [time-1100] 1fr  [time-1115] 1fr 
+                                      [time-1130] 1fr  [time-1145] 1fr
+                                      [time-1200] 1fr  [time-1215] 1fr 
+                                      [time-1230] 1fr  [time-1245] 1fr
+                                      [time-1300] 1fr  [time-1315] 1fr 
+                                      [time-1330] 1fr  [time-1345] 1fr
+                                      [time-1400] 1fr  [time-1415] 1fr 
+                                      [time-1430] 1fr  [time-1445] 1fr
+                                      [time-1500] 1fr  [time-1515] 1fr 
+                                      [time-1530] 1fr  [time-1545] 1fr
+                                      [time-1600] 1fr  [time-1615] 1fr 
+                                      [time-1630] 1fr  [time-1645] 1fr
+                                      [time-1700] 1fr  [time-1715] 1fr 
+                                      [time-1730] 1fr  [time-1745] 1fr                                      
                                       ;
     			/* Note 1:
     			Use 24hr time for gridline names for simplicity
@@ -236,3 +236,21 @@ hr {
   margin: 40px 0;
 }
 
+/* modal styles */
+#modalContent .tutor-name{
+  font-weight: bold;
+  text-align: center;
+  font-size: 2em;
+}
+
+#modalContent .courses, #modalContent .langs{
+  font-weight: bold;
+  margin: 5px 0 5px 0;
+  font-size: 1.5em;
+}
+
+#modalContent .course-list, #modalContent .lang-list{
+
+  margin-left: 10px;
+
+}
